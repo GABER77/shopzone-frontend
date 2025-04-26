@@ -1,16 +1,18 @@
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, Links, NavLink } from "react-router-dom";
 import { icons } from "../assets/getIcon";
 
 const Navbar = () => {
+  const [visible, setVisible] = useState(false);
+
   return (
     <div className="flex items-center justify-between py-6 font-medium">
       <div className="flex items-center gap-2">
-        <img src={icons.logo} className="w-15" alt="Logo" />
+        <img src={icons.logo} className="w-14" alt="Logo" />
         <p className="font-bold text-3xl text-emerald-700">ShopZone</p>
       </div>
 
-      <ul className="hidden sm:flex gap-6 text-gray-800 absolute left-1/2 transform -translate-x-1/2">
+      <ul className="hidden lg:flex gap-6 text-gray-800 absolute left-1/2 transform -translate-x-1/2">
         <NavLink to="/" className="flex flex-col items-center">
           <p>HOME</p>
           <hr className="w-3/4 border-none h-[1.6px] bg-emerald-700 hidden" />
@@ -44,10 +46,31 @@ const Navbar = () => {
         </div>
         <Link to="/cart" className="relative">
           <img src={icons.cart} className="w-6.5 cursor-pointer" alt="" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">
-            8
-          </p>
+          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">8</p>
         </Link>
+        <img onClick={() => setVisible(true)} src={icons.menu} className="flex lg:hidden w-5 cursor-pointer" />
+      </div>
+
+      {/* Sidebar menu for small screens*/}
+      <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? "w-full" : "w-0"}`}>
+        <div className="flex flex-col">
+          <div onClick={() => setVisible(false)} className="flex items-center gap-1 p-4 cursor-pointer">
+            <img src={icons.back} className="h-3.5 " alt="" />
+            <p>Back</p>
+          </div>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">
+            Home
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">
+            Collection
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/about">
+            About
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/contact">
+            Contact
+          </NavLink>
+        </div>
       </div>
     </div>
   );
