@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Links, NavLink } from "react-router-dom";
-import { icons } from "../assets/getIcon";
+import { assets } from "../assets/getAssets";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -8,7 +8,7 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-6 font-medium">
       <div className="flex items-center gap-2">
-        <img src={icons.logo} className="w-14" alt="Logo" />
+        <img src={assets.logo} className="w-14" alt="Logo" />
         <p className="font-bold text-3xl text-emerald-700">ShopZone</p>
       </div>
 
@@ -32,10 +32,10 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6.5">
-        <img src={icons.search} className="w-5 cursor-pointer" alt="" />
+        <img src={assets.search} className="w-5 cursor-pointer" alt="" />
 
         <div className="group relative">
-          <img src={icons.profile} className="w-5.5 cursor-pointer" alt="" />
+          <img src={assets.profile} className="w-5.5 cursor-pointer" alt="" />
           <div className="group-hover:block hidden absolute dropdown-menu left-1/2 transform -translate-x-1/2 pt-4">
             <div className=" flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
               <p className="cursor-pointer hover:text-black">My Profile</p>
@@ -45,17 +45,17 @@ const Navbar = () => {
           </div>
         </div>
         <Link to="/cart" className="relative">
-          <img src={icons.cart} className="w-6.5 cursor-pointer" alt="" />
+          <img src={assets.cart} className="w-6.5 cursor-pointer" alt="" />
           <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">8</p>
         </Link>
-        <img onClick={() => setVisible(true)} src={icons.menu} className="flex lg:hidden w-5 cursor-pointer" />
+        <img onClick={() => setVisible(true)} src={assets.menu} className="flex lg:hidden w-5 cursor-pointer" />
       </div>
 
       {/* Sidebar menu for small screens*/}
       <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? "w-full" : "w-0"}`}>
         <div className="flex flex-col">
           <div onClick={() => setVisible(false)} className="flex items-center gap-1 p-4 cursor-pointer">
-            <img src={icons.back} className="h-3.5 " alt="" />
+            <img src={assets.back} className="h-3.5 " alt="" />
             <p>Back</p>
           </div>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">
