@@ -1,5 +1,5 @@
 import { ShopContext } from "./ShopContext";
-import { products } from "../assets/products";
+import products from "../assets/products";
 
 const ShopContextProvider = (props) => {
   const currency = "$";
