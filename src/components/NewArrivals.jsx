@@ -3,7 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductItem from "./ProductItem";
 
-const LatestCollection = () => {
+const NewArrivals = () => {
   const { products } = useContext(ShopContext);
   const [latestProducts, setLatestProducts] = useState([]);
 
@@ -37,4 +37,4 @@ const LatestCollection = () => {
   );
 };
 
-export default LatestCollection;
+export default NewArrivals;
