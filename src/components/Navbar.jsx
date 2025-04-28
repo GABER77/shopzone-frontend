@@ -8,26 +8,26 @@ const Navbar = () => {
   return (
     <div className="flex items-center justify-between py-6 font-medium">
       <div className="flex items-center gap-2">
-        <img src={assets.logo} className="w-14" alt="Logo" />
-        <p className="font-bold text-3xl text-emerald-700">ShopZone</p>
+        <img src="/logo.png" className="w-14" alt="Logo" />
+        <p className="font-bold text-3xl text-blue-500">ShopZone</p>
       </div>
 
       <ul className="hidden lg:flex gap-6 text-gray-800 absolute left-1/2 transform -translate-x-1/2">
         <NavLink to="/" className="flex flex-col items-center">
           <p>HOME</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-emerald-700 hidden" />
+          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
         <NavLink to="/collection" className="flex flex-col items-center">
           <p>COLLECTION</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-emerald-700 hidden" />
+          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
         <NavLink to="/about" className="flex flex-col items-center">
           <p>ABOUT</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-emerald-700 hidden" />
+          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
         <NavLink to="/contact" className="flex flex-col items-center">
           <p>CONTACT</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-emerald-700 hidden" />
+          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
       </ul>
 
