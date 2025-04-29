@@ -5,7 +5,7 @@ const products = [
     price: 169.99,
     images: ["/productPhotos/1-1.jpeg", "/productPhotos/1-2.jpeg", "/productPhotos/1-3.jpeg"],
     category: "Men's Shoes",
-    size: ["9", "9.5", "10", "10.5", "12", "13"],
+    size: ["9", "9.5", "10", "10.5", "11", "12"],
     onSale: false,
   },
   {
