@@ -2,11 +2,11 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <div className="bg-black text-white rounded-3xl p-8 mb-5">
+    <div className="bg-black text-white rounded-3xl p-8 mb-6 mt-8">
       <div className="flex flex-col sm:grid grid-cols-[3fr_1fr_1fr] gap-8 text-sm">
         {/* Left Column */}
         <div className="flex flex-col gap-6">
-          {/* Logo + Name */}
+          {/* Logo */}
           <div className="flex items-center gap-3">
             <img className="w-20" src="/logo.png" alt="ShopZone Logo" />
             <p className="font-bold text-3xl text-blue-500">ShopZone</p>

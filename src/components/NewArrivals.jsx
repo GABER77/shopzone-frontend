@@ -20,7 +20,7 @@ const NewArrivals = () => {
         </p>
       </div>
       {/* Rendering Products Grid*/}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-7 pb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-7">
         {latestProducts.map((item, index) => (
           <ProductItem
             key={index}
