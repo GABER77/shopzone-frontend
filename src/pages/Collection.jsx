@@ -6,10 +6,12 @@ import ProductItem from "../components/ProductItem";
 
 const Collection = () => {
   const { products } = useContext(ShopContext);
+
   const [showFilter, setShowFilter] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [shoeSize, setShoeSize] = useState([]);
+  const [sortType, setSortType] = useState("relevant");
 
   const toggleCategory = (e) => {
     const value = e.target.value;
@@ -21,23 +23,35 @@ const Collection = () => {
     setShoeSize((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
   };
 
-  const applyFilter = () => {
-    let productsCopy = products.slice();
-
-    if (category.length > 0) {
-      productsCopy = productsCopy.filter((item) => category.includes(item.category));
-    }
-
-    if (shoeSize.length > 0) {
-      productsCopy = productsCopy.filter((item) => item.size.some((size) => shoeSize.includes(size)));
-    }
-
-    setFilteredProducts(productsCopy);
-  };
-
   useEffect(() => {
-    applyFilter();
-  }, [category, shoeSize]);
+    let result = products.slice();
+
+    // 1. Filter by category
+    if (category.length > 0) {
+      result = result.filter((item) => category.includes(item.category));
+    }
+
+    // 2. Filter by shoe size
+    if (shoeSize.length > 0) {
+      result = result.filter((item) => item.size.some((size) => shoeSize.includes(size)));
+    }
+
+    // 3. Sort the result
+    switch (sortType) {
+      case "low-high":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "high-low":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      default:
+        // Relevant sort (no specific action needed)
+        break;
+    }
+
+    // 4. Update the filteredProducts
+    setFilteredProducts(result);
+  }, [products, category, shoeSize, sortType]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-7 border-t">
@@ -82,8 +96,8 @@ const Collection = () => {
           <Title text1={"ALL"} text2={"Collections"} />
 
           {/* Product Sort */}
-          <select className="border-2 border-gray-500 text-sm px-2">
-            <option value="relavent">Sort by: Relavent</option>
+          <select onChange={(e) => setSortType(e.target.value)} className="border-2 border-gray-500 text-sm px-2">
+            <option value="relevant">Sort by: Relevant</option>
             <option value="low-high">Sort by: Low to High</option>
             <option value="high-low">Sort by: High to Low</option>
           </select>
