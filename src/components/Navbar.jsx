@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, Links, NavLink } from "react-router-dom";
 import { assets } from "../assets/getAssets";
+import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+  const { setShowSearch } = useContext(ShopContext);
 
   return (
     <div className="flex items-center justify-between py-6 font-medium">
@@ -32,7 +34,7 @@ const Navbar = () => {
       </ul>
 
       <div className="flex items-center gap-6.5">
-        <img src={assets.search} className="w-5 cursor-pointer" alt="" />
+        <img onClick={() => setShowSearch(true)} src={assets.search} className="w-5 cursor-pointer" alt="" />
 
         <div className="group relative">
           <img src={assets.profile} className="w-5.5 cursor-pointer" alt="" />
@@ -46,13 +48,19 @@ const Navbar = () => {
         </div>
         <Link to="/cart" className="relative">
           <img src={assets.cart} className="w-6.5 cursor-pointer" alt="" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">8</p>
+          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">
+            8
+          </p>
         </Link>
         <img onClick={() => setVisible(true)} src={assets.menu} className="flex lg:hidden w-5 cursor-pointer" />
       </div>
 
       {/* Sidebar menu for small screens*/}
-      <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? "w-full" : "w-0"}`}>
+      <div
+        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
+          visible ? "w-full" : "w-0"
+        }`}
+      >
         <div className="flex flex-col">
           <div onClick={() => setVisible(false)} className="flex items-center gap-1 p-4 cursor-pointer">
             <img src={assets.back} className="h-3.5 " alt="" />
