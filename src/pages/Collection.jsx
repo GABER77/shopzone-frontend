@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/getAssets";
 import Title from "../components/Title";
-import ProductItem from "../components/ProductItem";
+import ProductCard from "../components/ProductCard";
 
 const Collection = () => {
   const { search, setSearch, products } = useContext(ShopContext);
@@ -101,7 +101,7 @@ const Collection = () => {
           <div className={`border border-gray-500 rounded-lg p-5 mt-6 bg-white ${showFilter ? "" : "hidden"} sm:block`}>
             <p className="mb-4 text-lg font-semibold tracking-wide">Shoe Sizes</p>
             <div className="flex flex-col gap-3 text-sm text-gray-900">
-              {["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12"].map((size) => (
+              {["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13"].map((size) => (
                 <label key={size} className="flex items-center gap-3 cursor-pointer hover:text-blue-500">
                   <input type="checkbox" value={size} onChange={toggleShoeSize} className="w-4 h-4 accent-blue-500" />
                   US Size {size}
@@ -124,7 +124,7 @@ const Collection = () => {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
             {filteredProducts.map((item, index) => (
-              <ProductItem
+              <ProductCard
                 key={index}
                 id={item._id}
                 images={item.images}

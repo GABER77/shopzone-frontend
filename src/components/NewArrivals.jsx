@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
-import ProductItem from "./ProductItem";
+import ProductCard from "./ProductCard";
 
 const NewArrivals = () => {
   const { products } = useContext(ShopContext);
-  const [latestProducts, setLatestProducts] = useState([]);
+  const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
-    setLatestProducts(products.slice(0, 10));
+    setNewArrivals(products.slice(0, 10));
   }, [products]);
 
   return (
@@ -21,8 +21,8 @@ const NewArrivals = () => {
       </div>
       {/* Rendering Products Grid*/}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-7">
-        {latestProducts.map((item, index) => (
-          <ProductItem
+        {newArrivals.map((item, index) => (
+          <ProductCard
             key={index}
             id={item._id}
             images={item.images}

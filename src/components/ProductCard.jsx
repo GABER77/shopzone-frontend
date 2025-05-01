@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 
-const ProductItem = ({ id, images, name, price, onSale, category }) => {
+const ProductCard = ({ id, images, name, price, onSale, category }) => {
   const { currency } = useContext(ShopContext);
 
   return (
@@ -28,4 +28,4 @@ const ProductItem = ({ id, images, name, price, onSale, category }) => {
   );
 };
 
-export default ProductItem;
+export default ProductCard;
