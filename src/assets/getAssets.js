@@ -5,5 +5,6 @@ import menu from "./icons/menu.png";
 import back from "./icons/back.png";
 import banner from "./icons/banner.png";
 import x from "./icons/x.png";
+import star from "./icons/star.png";
 
-export const assets = { search, profile, cart, menu, back, banner, x };
+export const assets = { search, profile, cart, menu, back, banner, x, star };
