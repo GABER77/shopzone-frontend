@@ -8,6 +8,8 @@ const Product = () => {
   const { products, currency } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
+  const [selectedSize, setSelectedSize] = useState("");
+  const [activeTab, setActiveTab] = useState("description");
 
   const fetchProductData = async () => {
     products.map((item) => {
@@ -56,33 +58,38 @@ const Product = () => {
             <img src={assets.star} alt="" />
             <p className="pl-1 text-sm">(162)</p>
           </div>
-          <p className="mt-5 text-3xl font-medium">
+          <p className="mt-4 text-3xl font-medium">
             {currency}
             {productData.price}
           </p>
           {/* Size Selection */}
-          <div className="mt-6 w-110">
-            <h3 className="font-medium mb-2">Select Size</h3>
-            <div className="grid grid-cols-5 gap-4">
-              {[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13].map((size) => {
-                const isAvailable = productData.size.includes(size.toString());
-                return (
-                  <div
-                    key={size}
-                    className={`border rounded-lg flex h-13 items-center justify-center text-lg font-normal cursor-pointer select-none ${
-                      isAvailable
-                        ? "hover:bg-gray-100 text-black"
-                        : "line-through text-gray-400 bg-gray-100 cursor-not-allowed"
-                    }`}
-                  >
-                    {size}
-                  </div>
-                );
-              })}
-            </div>
+          <h3 className="text-lg mt-4">Select Size</h3>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-2 max-w-[550px] ">
+            {[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13].map((size) => {
+              const available = productData.size.includes(size.toString());
+              const selected = selectedSize === size;
+
+              const baseClasses =
+                "border rounded-lg flex h-13 items-center justify-center text-lg font-normal select-none transition-all";
+              const availableClasses = available
+                ? "text-black hover:bg-gray-100 cursor-pointer"
+                : "text-gray-400 bg-gray-100 line-through cursor-not-allowed";
+              const selectedClasses = selected && available ? "border-blue-500 border-3" : "";
+
+              return (
+                <button
+                  key={size}
+                  onClick={() => available && setSelectedSize(size)}
+                  disabled={!available}
+                  className={`${baseClasses} ${availableClasses} ${selectedClasses}`}
+                >
+                  {size}
+                </button>
+              );
+            })}
           </div>
           {/* Action Buttons */}
-          <div className="mt-6 flex gap-4 w-130">
+          <div className="mt-6 flex gap-4 max-w-[500px] ">
             <button className="flex-1 bg-blue-500 text-white py-3 h-13 cursor-pointer rounded-4xl font-medium hover:opacity-90 transition duration-200">
               Buy Now
             </button>
@@ -98,6 +105,33 @@ const Product = () => {
             <p className="font-medium pt-4">Free Pickup</p>
             <p className="text-blue-600 hover:underline cursor-pointer">Find a Store</p>
           </div>
+        </div>
+      </div>
+      {/* Description & Reviews */}
+      <div className="mt-10">
+        {/* Tab Buttons */}
+        <div className="flex gap-2 bg-gray-100 p-1 rounded-t-xl w-fit border border-b-0">
+          <button
+            onClick={() => setActiveTab("description")}
+            className={`px-5 py-2 text-sm font-semibold rounded-lg ${
+              activeTab === "description" ? "bg-white shadow-sm" : "text-gray-600 hover:bg-white"
+            }`}
+          >
+            Description
+          </button>
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className={`px-5 py-2 text-sm font-semibold rounded-lg ${
+              activeTab === "reviews" ? "bg-white shadow-sm" : "text-gray-600 hover:bg-white"
+            }`}
+          >
+            Reviews (162)
+          </button>
+        </div>
+
+        {/* Content Area */}
+        <div className="border rounded-b-xl rounded-tr-xl px-6 py-6 text-md">
+          {activeTab === "description" ? <p>{productData.description}</p> : <p>Waiting!</p>}
         </div>
       </div>
     </div>
