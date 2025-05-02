@@ -30,7 +30,21 @@ const ShopContextProvider = (props) => {
     setCart(cartClone);
   };
 
-  const value = { products, currency, delivery_fee, search, setSearch, cart, addToCart };
+  const getCartCount = () => {
+    let totalCount = 0;
+
+    Object.values(cart).forEach((sizes) => {
+      Object.values(sizes).forEach((quantity) => {
+        if (typeof quantity === "number" && quantity > 0) {
+          totalCount += quantity;
+        }
+      });
+    });
+
+    return totalCount;
+  };
+
+  const value = { products, currency, delivery_fee, search, setSearch, cart, addToCart, getCartCount };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
 };
