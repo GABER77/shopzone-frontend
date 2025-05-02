@@ -5,7 +5,7 @@ import { assets } from "../assets/getAssets";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency } = useContext(ShopContext);
+  const { products, currency, addToCart } = useContext(ShopContext);
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -64,7 +64,7 @@ const Product = () => {
           </p>
           {/* Size Selection */}
           <h3 className="text-lg mt-4">Select Size</h3>
-          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-2 max-w-[550px] ">
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-2 max-w-[500px] ">
             {[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13].map((size) => {
               const available = productData.size.includes(size.toString());
               const selected = selectedSize === size;
@@ -93,7 +93,10 @@ const Product = () => {
             <button className="flex-1 bg-blue-500 text-white py-3 h-13 cursor-pointer rounded-4xl font-medium hover:opacity-90 transition duration-200">
               Buy Now
             </button>
-            <button className="flex-1 border border-black text-black py-3 h-13 cursor-pointer rounded-4xl font-medium hover:bg-gray-100 transition duration-200">
+            <button
+              onClick={() => addToCart(productId, selectedSize)}
+              className="flex-1 border border-black text-black py-3 h-13 cursor-pointer rounded-4xl font-medium hover:bg-gray-100 transition duration-200"
+            >
               Add to Cart
             </button>
           </div>
