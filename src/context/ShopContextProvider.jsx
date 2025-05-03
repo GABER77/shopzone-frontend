@@ -33,6 +33,26 @@ const ShopContextProvider = (props) => {
     setCart(cartClone);
   };
 
+  const removeFromCart = (productId, size) => {
+    setCart((prevCart) => {
+      const updatedCart = { ...prevCart };
+      const quantity = updatedCart[productId]?.[size];
+
+      if (!quantity) return prevCart;
+
+      if (quantity > 1) {
+        updatedCart[productId][size] -= 1;
+      } else {
+        delete updatedCart[productId][size];
+        if (Object.keys(updatedCart[productId]).length === 0) {
+          delete updatedCart[productId];
+        }
+      }
+
+      return updatedCart;
+    });
+  };
+
   const getCartCount = () => {
     let totalCount = 0;
 
@@ -47,7 +67,18 @@ const ShopContextProvider = (props) => {
     return totalCount;
   };
 
-  const value = { products, currency, delivery_fee, tax_fee, search, setSearch, cart, addToCart, getCartCount };
+  const value = {
+    products,
+    currency,
+    delivery_fee,
+    tax_fee,
+    search,
+    setSearch,
+    cart,
+    addToCart,
+    removeFromCart,
+    getCartCount,
+  };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
 };
