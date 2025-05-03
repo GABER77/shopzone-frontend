@@ -6,5 +6,6 @@ import back from "./icons/back.png";
 import banner from "./icons/banner.png";
 import x from "./icons/x.png";
 import star from "./icons/star.png";
+import trash from "./icons/trash.png";
 
-export const assets = { search, profile, cart, menu, back, banner, x, star };
+export const assets = { search, profile, cart, menu, back, banner, x, star, trash };
