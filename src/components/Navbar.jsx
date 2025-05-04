@@ -8,7 +8,7 @@ const Navbar = () => {
   const { getCartCount, navigate } = useContext(ShopContext);
 
   return (
-    <div className="flex items-center justify-between py-6 font-medium">
+    <div className="flex items-center justify-between mt-4 mb-6 font-medium">
       <div className="flex items-center gap-2">
         <img src="/logo.png" className="w-14" alt="Logo" />
         <p className="font-bold text-3xl text-blue-500">ShopZone</p>
@@ -36,7 +36,10 @@ const Navbar = () => {
           <button onClick={() => navigate("/login")} className="py-2.5 px-5 cursor-pointer">
             Log in
           </button>
-          <button className="bg-blue-500 text-white w-25 py-2.5 cursor-pointer rounded-3xl hover:opacity-90">
+          <button
+            onClick={() => navigate("/signup")}
+            className="bg-blue-500 text-white w-25 py-2.5 cursor-pointer rounded-3xl hover:opacity-90"
+          >
             Sign up
           </button>
           <div className="group-hover:block hidden absolute dropdown-menu left-1/2 transform -translate-x-1/2 pt-4">
