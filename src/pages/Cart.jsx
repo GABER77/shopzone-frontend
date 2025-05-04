@@ -4,7 +4,7 @@ import Title from "../components/Title";
 import { assets } from "../assets/getAssets";
 
 const Cart = () => {
-  const { products, cart, removeFromCart, currency, delivery_fee, tax_fee } = useContext(ShopContext);
+  const { products, cart, removeFromCart, currency, delivery_fee, tax_fee, navigate } = useContext(ShopContext);
 
   const cartItems = [];
   let subtotal = 0;
@@ -37,7 +37,7 @@ const Cart = () => {
   const total = subtotal + taxAmount + deliveryFee;
 
   return (
-    <div className="border-t pt-14">
+    <div className="border-t pt-12">
       <div className="text-2xl mb-3">
         <Title text1={"YOUR"} text2={"CART"} />
       </div>
@@ -113,7 +113,10 @@ const Cart = () => {
                 {total.toFixed(2)}
               </span>
             </div>
-            <button className="mt-4 w-full bg-blue-500 text-white cursor-pointer py-3 rounded-4xl hover:opacity-90">
+            <button
+              onClick={() => navigate("/orders")}
+              className="mt-4 w-full bg-blue-500 text-white cursor-pointer py-3 rounded-4xl hover:opacity-90"
+            >
               Checkout
             </button>
             <p className="mt-4 text-xs">

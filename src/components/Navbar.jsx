@@ -5,7 +5,7 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { getCartCount } = useContext(ShopContext);
+  const { getCartCount, navigate } = useContext(ShopContext);
 
   return (
     <div className="flex items-center justify-between py-6 font-medium">
@@ -23,19 +23,22 @@ const Navbar = () => {
           <p>COLLECTION</p>
           <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
-        <NavLink to="/about" className="flex flex-col items-center">
+        <NavLink className="flex flex-col items-center">
           <p>ABOUT</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
-        <NavLink to="/contact" className="flex flex-col items-center">
+        <NavLink className="flex flex-col items-center">
           <p>CONTACT</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
       </ul>
 
       <div className="flex items-center gap-6.5">
         <div className="group relative">
-          <img src={assets.profile} className="w-5.5 cursor-pointer" alt="" />
+          <button onClick={() => navigate("/login")} className="py-2.5 px-5 cursor-pointer">
+            Log in
+          </button>
+          <button className="bg-blue-500 text-white w-25 py-2.5 cursor-pointer rounded-3xl hover:opacity-90">
+            Sign up
+          </button>
           <div className="group-hover:block hidden absolute dropdown-menu left-1/2 transform -translate-x-1/2 pt-4">
             <div className=" flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
               <p className="cursor-pointer hover:text-black">My Profile</p>
@@ -46,7 +49,7 @@ const Navbar = () => {
         </div>
         <Link to="/cart" className="relative">
           <img src={assets.cart} className="w-6.5 cursor-pointer" alt="" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-amber-500 text-white aspect-square rounded-full text-[11px]">
+          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-blue-500 text-white aspect-square rounded-full text-[11px]">
             {getCartCount()}
           </p>
         </Link>
