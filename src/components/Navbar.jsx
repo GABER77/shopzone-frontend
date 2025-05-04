@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/getAssets";
 import { ShopContext } from "../context/ShopContext";
@@ -7,11 +7,19 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const { getCartCount, navigate } = useContext(ShopContext);
 
+  useEffect(() => {
+    if (visible) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [visible]);
+
   return (
     <div className="flex items-center justify-between mt-4 mb-6 font-medium">
       <div className="flex items-center gap-2">
-        <img src="/logo.png" className="w-14" alt="Logo" />
-        <p className="font-bold text-3xl text-blue-500">ShopZone</p>
+        <img src="/logo.png" className="w-10 sm:w-14" alt="Logo" />
+        <p className="font-bold text-xl sm:text-3xl text-blue-500">ShopZone</p>
       </div>
 
       <ul className="hidden lg:flex gap-6 text-gray-800 absolute left-1/2 transform -translate-x-1/2">
@@ -61,7 +69,7 @@ const Navbar = () => {
 
       {/* Sidebar menu for small screens*/}
       <div
-        className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${
+        className={`fixed top-0 right-0 bottom-0 overflow-hidden z-50 bg-white transition-all ${
           visible ? "w-full" : "w-0"
         }`}
       >
@@ -76,12 +84,12 @@ const Navbar = () => {
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">
             Collection
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/about">
+          <a onClick={() => setVisible(false)} className="py-2 pl-6 border cursor-pointer">
             About
-          </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/contact">
+          </a>
+          <a onClick={() => setVisible(false)} className="py-2 pl-6 border cursor-pointer">
             Contact
-          </NavLink>
+          </a>
         </div>
       </div>
     </div>
