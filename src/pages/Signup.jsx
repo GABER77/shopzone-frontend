@@ -2,12 +2,16 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const Signup = () => {
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+  };
+
   return (
-    <div className="pt-10 pb-20 flex items-center justify-center">
+    <div className="pt-6 pb-25 flex items-center justify-center">
       <div className="rounded-lg w-full max-w-sm p-6 border-1">
         <h2 className="text-xl font-semibold text-center mb-5">Create new account</h2>
 
-        <form className="space-y-4">
+        <form onSubmit={onSubmitHandler} className="space-y-4">
           <div>
             <label className="block text-sm font-medium">Username</label>
             <input
