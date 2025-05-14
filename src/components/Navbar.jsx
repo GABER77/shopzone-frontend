@@ -31,6 +31,10 @@ const Navbar = () => {
           <p>COLLECTION</p>
           <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
+        <NavLink to="/dashboard" className="flex flex-col items-center">
+          <p>DASHBOARD</p>
+          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
+        </NavLink>
         <NavLink className="flex flex-col items-center">
           <p>ABOUT</p>
         </NavLink>
@@ -75,7 +79,7 @@ const Navbar = () => {
       >
         <div className="flex flex-col">
           <div onClick={() => setVisible(false)} className="flex items-center gap-1 p-4 cursor-pointer">
-            <img src={assets.back} className="h-3.5 " alt="" />
+            <img src={assets.back} className="h-3.5" alt="" />
             <p>Back</p>
           </div>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/">
@@ -83,6 +87,9 @@ const Navbar = () => {
           </NavLink>
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">
             Collection
+          </NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/dashboard">
+            Dashboard
           </NavLink>
           <a onClick={() => setVisible(false)} className="py-2 pl-6 border cursor-pointer">
             About
