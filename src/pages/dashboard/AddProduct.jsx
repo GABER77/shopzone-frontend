@@ -14,11 +14,11 @@ const AddProduct = () => {
         {/* Image Upload Boxes */}
         <div>
           <p className="font-semibold text-xl mb-3">Product Images:</p>
-          <div className="grid grid-cols-3">
+          <div className="w-full max-w-6xl mx-auto px-1 py-1 grid grid-cols-3 gap-6">
             {[...Array(3)].map((_, i) => (
               <label
                 key={i}
-                className="w-50 aspect-square border-2 border-gray-700 rounded-xl flex items-center justify-center text-sm text-gray-700 cursor-pointer"
+                className="w-full max-w-full aspect-square border-2 border-gray-700 rounded-xl flex items-center justify-center text-sm sm:text-base md:text-lg text-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
               >
                 <input type="file" accept="image/*" className="hidden" />
                 Click to upload
@@ -54,12 +54,14 @@ const AddProduct = () => {
 
         {/* On Sale */}
         <label className="flex items-center gap-2 mt-4">
-          <input type="checkbox" className="w-5 h-5 accent-blue-500" />
+          <input type="checkbox" className="w-5 h-5 accent-blue-500 cursor-pointer" />
           Is this product on sale?
         </label>
 
         {/* Submit Button */}
-        <button className="bg-blue-500 text-white py-3 px-6 rounded-full hover:bg-blue-600">Add Product</button>
+        <button className="bg-blue-500 cursor-pointer text-white py-3 px-6 rounded-full hover:bg-blue-600">
+          Add Product
+        </button>
       </form>
     </div>
   );

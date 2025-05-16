@@ -1,9 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { backendUrl } from "../config";
 
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+    try {
+      const response = await axios.post(`${backendUrl}/users/login`, { email, password });
+      console.log(response);
+    } catch (err) {
+      console.log(err.response?.data?.message || "Login failed. Please try again.");
+    }
   };
 
   return (
@@ -16,6 +27,8 @@ const Login = () => {
             <label className="block text-sm font-medium">Email</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-2 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="you@example.com"
               required
@@ -26,6 +39,8 @@ const Login = () => {
             <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-2 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="••••••••"
               required
