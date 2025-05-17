@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { backendUrl } from "../config";
+import { UserContext } from "../context/UserContext";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { setUser } = useContext(UserContext);
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
     try {
-      const response = await axios.post(`${backendUrl}/users/login`, { email, password });
+      const response = await axios.post(
+        `${backendUrl}/users/login`,
+        { email, password },
+        { withCredentials: true } // important to include cookie
+      );
+
+      // After login, fetch the current user data from /me endpoint
+      const res = await axios.get(`${backendUrl}/users/me`, { withCredentials: true });
+      setUser(res.data.data.user);
+
+      window.location.href = "/"; // redirect to home
+
       console.log(response);
     } catch (err) {
       console.log(err.response?.data?.message || "Login failed. Please try again.");
