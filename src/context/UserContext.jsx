@@ -6,25 +6,21 @@ import { UserContext } from "./UserContext";
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch current user info on app load
   useEffect(() => {
-    const fetchUser = async () => {
+    const getCurrentUser = async () => {
       try {
-        const res = await axios.get(`${backendUrl}/users/me`, {
-          withCredentials: true, // send cookie
+        const response = await axios.get(`${backendUrl}/users/me`, {
+          withCredentials: true,
         });
-        setUser(res.data.data.user);
-      } catch (err) {
+        setUser(response.data.user);
+      } catch {
         setUser(null);
-      } finally {
-        setLoading(false);
       }
     };
 
-    fetchUser();
+    getCurrentUser();
   }, []);
 
-  return <UserContext.Provider value={{ user, setUser, loading }}>{children}</UserContext.Provider>;
+  return <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>;
 };

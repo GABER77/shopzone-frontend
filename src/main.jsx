@@ -3,11 +3,14 @@ import "./index.css";
 import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import ShopContextProvider from "./context/ShopContextProvider.jsx";
+import { UserProvider } from "./context/UserContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <ShopContextProvider>
-      <App />
-    </ShopContextProvider>
+    <UserProvider>
+      <ShopContextProvider>
+        <App />
+      </ShopContextProvider>
+    </UserProvider>
   </BrowserRouter>
 );

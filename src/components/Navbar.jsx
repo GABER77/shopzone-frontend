@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/getAssets";
 import { ShopContext } from "../context/ShopContext";
+import { UserContext } from "../context/UserContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const { getCartCount, navigate } = useContext(ShopContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (visible) {
@@ -31,10 +33,14 @@ const Navbar = () => {
           <p>COLLECTION</p>
           <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
         </NavLink>
-        <NavLink to="/dashboard" className="flex flex-col items-center">
-          <p>DASHBOARD</p>
-          <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
-        </NavLink>
+
+        {(user?.role === "admin" || user?.role === "seller") && (
+          <NavLink to="/dashboard" className="flex flex-col items-center">
+            <p>DASHBOARD</p>
+            <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
+          </NavLink>
+        )}
+
         <NavLink className="flex flex-col items-center">
           <p>ABOUT</p>
         </NavLink>
@@ -54,13 +60,6 @@ const Navbar = () => {
           >
             Sign up
           </button>
-          <div className="group-hover:block hidden absolute dropdown-menu left-1/2 transform -translate-x-1/2 pt-4">
-            <div className=" flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 rounded">
-              <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Orders</p>
-              <p className="cursor-pointer hover:text-black">Logout</p>
-            </div>
-          </div>
         </div>
         <Link to="/cart" className="relative">
           <img src={assets.cart} className="w-6.5 cursor-pointer" alt="" />
@@ -88,9 +87,13 @@ const Navbar = () => {
           <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/collection">
             Collection
           </NavLink>
-          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/dashboard">
-            Dashboard
-          </NavLink>
+
+          {(user?.role === "admin" || user?.role === "seller") && (
+            <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to="/dashboard">
+              Dashboard
+            </NavLink>
+          )}
+
           <a onClick={() => setVisible(false)} className="py-2 pl-6 border cursor-pointer">
             About
           </a>

@@ -13,7 +13,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post(
+      const reponse = await axios.post(
         `${backendUrl}/users/login`,
         { email, password },
         { withCredentials: true } // important to include cookie
@@ -21,11 +21,10 @@ const Login = () => {
 
       // After login, fetch the current user data from /me endpoint
       const res = await axios.get(`${backendUrl}/users/me`, { withCredentials: true });
-      setUser(res.data.data.user);
+      setUser(res.data.user);
 
-      window.location.href = "/"; // redirect to home
-
-      console.log(response);
+      //window.location.href = "/"; // redirect to home
+      console.log(reponse);
     } catch (err) {
       console.log(err.response?.data?.message || "Login failed. Please try again.");
     }
