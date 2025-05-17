@@ -13,7 +13,7 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const reponse = await axios.post(
+      await axios.post(
         `${backendUrl}/users/login`,
         { email, password },
         { withCredentials: true } // important to include cookie
@@ -23,8 +23,7 @@ const Login = () => {
       const res = await axios.get(`${backendUrl}/users/me`, { withCredentials: true });
       setUser(res.data.user);
 
-      //window.location.href = "/"; // redirect to home
-      console.log(reponse);
+      window.location.href = "/"; // redirect to home
     } catch (err) {
       console.log(err.response?.data?.message || "Login failed. Please try again.");
     }
