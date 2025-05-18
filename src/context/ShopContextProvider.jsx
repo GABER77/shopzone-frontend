@@ -10,6 +10,7 @@ const ShopContextProvider = (props) => {
   const tax_fee = "5%";
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const addToCart = (productId, ProductSize) => {
@@ -81,6 +82,7 @@ const ShopContextProvider = (props) => {
     removeFromCart,
     getCartCount,
     navigate,
+    loading,
   };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;

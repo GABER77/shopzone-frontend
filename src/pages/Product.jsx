@@ -1,11 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
+import { UserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/getAssets";
 
 const Product = () => {
   const { productId } = useParams();
   const { products, currency, addToCart } = useContext(ShopContext);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");
@@ -94,7 +98,13 @@ const Product = () => {
               Buy Now
             </button>
             <button
-              onClick={() => addToCart(productId, selectedSize)}
+              onClick={() => {
+                if (user) {
+                  addToCart(productId, selectedSize);
+                } else {
+                  navigate("/login");
+                }
+              }}
               className="flex-1 border border-black text-black py-3 h-13 cursor-pointer rounded-4xl font-medium hover:bg-gray-100 transition duration-200"
             >
               Add to Cart

@@ -46,7 +46,7 @@ const Dashboard = () => {
       {/* Mobile Header */}
       <div className="md:hidden bg-white p-4 shadow flex justify-between items-center">
         <h1 className="text-xl font-bold text-blue-600">Dashboard</h1>
-        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="focus:outline-none">
+        <button onClick={() => setSidebarOpen(!sidebarOpen)} className="focus:outline-none cursor-pointer">
           {sidebarOpen ? (
             <div className="relative w-6 h-6">
               <span className="absolute w-6 h-0.5 bg-gray-600 rotate-45 top-1/2 left-0 transform -translate-y-1/2"></span>
