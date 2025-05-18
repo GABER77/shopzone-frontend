@@ -49,28 +49,54 @@ const Navbar = () => {
         </NavLink>
       </ul>
 
-      <div className="flex items-center gap-6.5">
-        <div className="group relative">
-          <button onClick={() => navigate("/login")} className="py-2.5 px-5 cursor-pointer">
-            Log in
-          </button>
-          <button
-            onClick={() => navigate("/signup")}
-            className="bg-blue-500 text-white w-25 py-2.5 cursor-pointer rounded-3xl hover:opacity-90"
-          >
-            Sign up
-          </button>
-        </div>
-        <Link to="/cart" className="relative">
-          <img src={assets.cart} className="w-6.5 cursor-pointer" alt="" />
-          <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-blue-500 text-white aspect-square rounded-full text-[11px]">
-            {getCartCount()}
-          </p>
-        </Link>
+      <div className="flex items-center gap-8">
+        {user ? (
+          <div className="flex items-center gap-3 cursor-pointer select-none">
+            <img
+              src={user.image}
+              alt=""
+              className="w-8 h-8 rounded-full object-cover"
+              onError={(e) => (e.style.display = "none")}
+            />
+            <span className="text-lg">{user.name?.split(" ")[0] || "User"}</span>
+          </div>
+        ) : (
+          <div className="group relative">
+            <button onClick={() => navigate("/login")} className="py-2.5 px-5 cursor-pointer">
+              Log in
+            </button>
+
+            <button
+              onClick={() => navigate("/signup")}
+              className="bg-blue-500 text-white w-25 py-2.5 cursor-pointer rounded-3xl hover:opacity-90"
+            >
+              Sign up
+            </button>
+          </div>
+        )}
+
+        {/* Cart Icon */}
+        {user && (
+          <Link to="/cart" className="relative">
+            <img src={assets.cart} className="w-6.5 cursor-pointer" alt="Cart" />
+            <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-blue-500 text-white aspect-square rounded-full text-[11px]">
+              {getCartCount()}
+            </p>
+          </Link>
+        )}
+
+        {/* Logout Icon */}
+        {user && (
+          <Link to="/cart" className="relative">
+            <img src={assets.logout} className="w-5.5 cursor-pointer" alt="Cart" />
+          </Link>
+        )}
+
+        {/* Sidebar Icon */}
         <img onClick={() => setVisible(true)} src={assets.menu} className="flex lg:hidden w-5 cursor-pointer" />
       </div>
 
-      {/* Sidebar menu for small screens*/}
+      {/* Sidebar for small screens */}
       <div
         className={`fixed top-0 right-0 bottom-0 overflow-hidden z-50 bg-white transition-all ${
           visible ? "w-full" : "w-0"

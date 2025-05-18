@@ -15,11 +15,13 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      await axios.post(`${backendUrl}/users/login`, { email, password }, { withCredentials: true });
+      await axios.post(
+        `${backendUrl}/users/login`,
+        { email, password },
+        { withCredentials: true } // important to include cookie
+      );
 
-      const res = await axios.get(`${backendUrl}/users/me`, {
-        withCredentials: true,
-      });
+      const res = await axios.get(`${backendUrl}/users/me`, { withCredentials: true });
       setUser(res.data.user);
 
       window.location.href = "/";
