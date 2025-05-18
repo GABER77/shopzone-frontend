@@ -7,7 +7,7 @@ import { UserContext } from "../context/UserContext";
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const { getCartCount, navigate } = useContext(ShopContext);
-  const { user } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
 
   useEffect(() => {
     if (visible) {
@@ -86,7 +86,7 @@ const Navbar = () => {
         )}
 
         {/* Logout Icon */}
-        {user && <img src={assets.logout} className="w-5.5 cursor-pointer" alt="" />}
+        {user && <img onClick={logout} src={assets.logout} className="w-5.5 cursor-pointer" alt="" />}
 
         {/* Sidebar Icon */}
         <img onClick={() => setVisible(true)} src={assets.menu} className="flex lg:hidden w-5 cursor-pointer" />
