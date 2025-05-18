@@ -21,9 +21,15 @@ const App = () => {
     <div className="px-5 sm:px-[4vw] md:px-[4vw] lg:px-[6vw]">
       <ToastContainer />
       {!hideNavbar && <Navbar />}
+
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
+        <Route path="/product/:productId" element={<Product />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+
+        {/* Admin or seller only */}
         <Route
           path="/dashboard"
           element={
@@ -32,11 +38,24 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/product/:productId" element={<Product />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/orders" element={<Orders />} />
+
+        {/* Only logged-in user */}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       <Footer />
     </div>

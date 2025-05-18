@@ -60,7 +60,10 @@ const Signup = () => {
             />
           </div>
 
-          <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded-3xl hover:opacity-90 transition">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white py-2 cursor-pointer rounded-3xl hover:opacity-90 transition"
+          >
             Sign up
           </button>
         </form>

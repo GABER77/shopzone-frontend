@@ -58,7 +58,7 @@ const Navbar = () => {
               className="w-8 h-8 rounded-full object-cover"
               onError={(e) => (e.style.display = "none")}
             />
-            <span className="text-lg">{user.name?.split(" ")[0] || "User"}</span>
+            <span className="font-medium">{user.name?.split(" ")[0] || "User"}</span>
           </div>
         ) : (
           <div className="group relative">
@@ -86,11 +86,7 @@ const Navbar = () => {
         )}
 
         {/* Logout Icon */}
-        {user && (
-          <Link to="/cart" className="relative">
-            <img src={assets.logout} className="w-5.5 cursor-pointer" alt="Cart" />
-          </Link>
-        )}
+        {user && <img src={assets.logout} className="w-5.5 cursor-pointer" alt="" />}
 
         {/* Sidebar Icon */}
         <img onClick={() => setVisible(true)} src={assets.menu} className="flex lg:hidden w-5 cursor-pointer" />
