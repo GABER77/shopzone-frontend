@@ -1,5 +1,5 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Collection from "./pages/Collection";
 import Dashboard from "./pages/dashboard/DashboardLayout";
@@ -14,10 +14,13 @@ import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
+  const location = useLocation();
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/signup";
+
   return (
     <div className="px-5 sm:px-[4vw] md:px-[4vw] lg:px-[6vw]">
       <ToastContainer />
-      <Navbar />
+      {!hideNavbar && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/collection" element={<Collection />} />
