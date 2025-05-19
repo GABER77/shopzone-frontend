@@ -70,7 +70,10 @@ const AddProduct = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
+      {/* Loading overlay */}
+      {loading && <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center" />}
+
       <h2 className="text-3xl font-semibold mb-6 text-gray-800">Add New Product</h2>
 
       <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-xl shadow-md">

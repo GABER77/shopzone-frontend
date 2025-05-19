@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ShopContext } from "./ShopContext";
-import products from "../assets/products";
 import { backendUrl } from "../config";
 
 const ShopContextProvider = (props) => {
@@ -13,6 +12,7 @@ const ShopContextProvider = (props) => {
 
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState({});
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -23,8 +23,34 @@ const ShopContextProvider = (props) => {
       toast.success("Product added successfully!", { position: "top-left", autoClose: 3000 });
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add product", { position: "top-left", autoClose: 3000 });
+      throw error;
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getAllProducts = async () => {
+    try {
+      const res = await axios.get(`${backendUrl}/products`);
+      setProducts(res.data.data || []);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch products", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+    }
+  };
+
+  const deleteProduct = async (productId) => {
+    try {
+      await axios.delete(`${backendUrl}/products/${productId}`, { withCredentials: true });
+      setProducts((prev) => prev.filter((product) => product.id !== productId));
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete product", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+      throw error;
     }
   };
 
@@ -99,6 +125,8 @@ const ShopContextProvider = (props) => {
     navigate,
     loading,
     addProduct,
+    getAllProducts,
+    deleteProduct,
   };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
