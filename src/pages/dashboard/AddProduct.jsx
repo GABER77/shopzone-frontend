@@ -34,27 +34,26 @@ const AddProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (images.length === 0 || !images[0]) {
+    if (images.length === 0) {
       toast.error("Please upload at least one image.", { position: "top-left", autoClose: 3000 });
       return;
     }
 
-    try {
-      const productData = {
-        name: productName,
-        price,
-        description,
-        category,
-        onSale,
-        sizes,
-        images,
-      };
-      await addProduct(productData);
-      toast.success("Product added successfully!", { position: "top-left", autoClose: 3000 });
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to add product", { position: "top-left", autoClose: 3000 });
+    if (sizes.length === 0) {
+      toast.error("Please choose at least one size.", { position: "top-left", autoClose: 3000 });
+      return;
     }
+
+    const formData = new FormData();
+    formData.append("name", productName);
+    formData.append("price", price);
+    formData.append("description", description);
+    formData.append("category", category);
+    formData.append("onSale", onSale);
+    sizes.forEach((size) => formData.append("sizes", size));
+    images.forEach((image) => formData.append("images", image));
+
+    await addProduct(formData);
   };
 
   return (
@@ -69,7 +68,7 @@ const AddProduct = () => {
             {[...Array(3)].map((_, i) => (
               <label
                 key={i}
-                className="w-full aspect-square border-2 border-gray-700 rounded-xl flex items-center justify-center text-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
+                className="w-full aspect-square border-2 border-gray-700 rounded-xl flex items-center text-lg font-medium justify-center text-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
               >
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageChange(e, i)} />
                 {images[i] ? images[i].name : "Click to upload"}
@@ -134,10 +133,10 @@ const AddProduct = () => {
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="men">Men's Shoes</option>
-          <option value="women">Women's Shoes</option>
-          <option value="basketball">Basketball Shoes</option>
-          <option value="running">Running Shoes</option>
+          <option value="Men's Shoes">Men's Shoes</option>
+          <option value="Women's Shoes">Women's Shoes</option>
+          <option value="Basketball Shoes">Basketball Shoes</option>
+          <option value="Running Shoes">Running Shoes</option>
         </select>
 
         {/* On Sale */}

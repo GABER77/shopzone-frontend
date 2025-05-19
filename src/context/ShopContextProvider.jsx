@@ -1,17 +1,32 @@
-import { ShopContext } from "./ShopContext";
-import products from "../assets/products";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ShopContext } from "./ShopContext";
+import products from "../assets/products";
+import { backendUrl } from "../config";
 
 const ShopContextProvider = (props) => {
   const currency = "$";
   const delivery_fee = "10";
   const tax_fee = "5%";
+
   const [search, setSearch] = useState("");
   const [cart, setCart] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const addProduct = async (formData) => {
+    setLoading(true);
+    try {
+      await axios.post(`${backendUrl}/products`, formData, { withCredentials: true });
+      toast.success("Product added successfully!", { position: "top-left", autoClose: 3000 });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to add product", { position: "top-left", autoClose: 3000 });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const addToCart = (productId, ProductSize) => {
     if (!ProductSize) {
@@ -83,6 +98,7 @@ const ShopContextProvider = (props) => {
     getCartCount,
     navigate,
     loading,
+    addProduct,
   };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
