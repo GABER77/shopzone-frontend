@@ -53,7 +53,20 @@ const AddProduct = () => {
     sizes.forEach((size) => formData.append("sizes", size));
     images.forEach((image) => formData.append("images", image));
 
-    await addProduct(formData);
+    try {
+      await addProduct(formData);
+
+      // Reset all fields on success
+      setImages([]);
+      setProductName("");
+      setPrice("");
+      setDescription("");
+      setSizes([]);
+      setCategory("Men's Shoes");
+      setOnSale(false);
+    } catch {
+      // Do nothing; error already handled inside addProduct
+    }
   };
 
   return (
@@ -68,10 +81,14 @@ const AddProduct = () => {
             {[...Array(3)].map((_, i) => (
               <label
                 key={i}
-                className="w-full aspect-square border-2 border-gray-700 rounded-xl flex items-center text-lg font-medium justify-center text-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
+                className="w-full aspect-square border-2 border-gray-500 rounded-2xl flex items-center text-lg font-medium justify-center text-gray-700 cursor-pointer hover:border-blue-500 transition-colors"
               >
                 <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageChange(e, i)} />
-                {images[i] ? images[i].name : "Click to upload"}
+                {images[i] ? (
+                  <img src={URL.createObjectURL(images[i])} className="w-full h-full object-cover rounded-2xl" />
+                ) : (
+                  <span className="text-lg font-medium text-gray-700">Click to upload</span>
+                )}
               </label>
             ))}
           </div>
