@@ -51,7 +51,7 @@ const ViewAllProducts = () => {
               <tr
                 key={product._id}
                 onClick={() => handleNavigate(product._id)}
-                className="hover:bg-gray-50 border-b transition"
+                className="hover:bg-gray-50 border-b transition cursor-pointer"
               >
                 <td className="p-3">
                   <img src={product.images[0]} alt={product.name} className="w-18 h-18 object-cover rounded-lg" />
@@ -62,7 +62,7 @@ const ViewAllProducts = () => {
                   <img
                     src={assets.trash}
                     alt="Delete"
-                    className="w-5 h-5 cursor-pointer hover:opacity-70"
+                    className="w-5 h-5 cursor-auto hover:opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(e, product._id);

@@ -7,7 +7,7 @@ import { assets } from "../assets/getAssets";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart } = useContext(ShopContext);
+  const { products, currency, addToCart, getAllProducts } = useContext(ShopContext);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
   const [productData, setProductData] = useState(false);
@@ -24,6 +24,10 @@ const Product = () => {
       }
     });
   };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   useEffect(() => {
     fetchProductData();
@@ -70,7 +74,7 @@ const Product = () => {
           <h3 className="text-lg mt-4">Select Size</h3>
           <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mt-2 max-w-[500px] ">
             {[7, 7.5, 8, 8.5, 9, 9.5, 10, 10.5, 11, 11.5, 12, 12.5, 13].map((size) => {
-              const available = productData.size.includes(size.toString());
+              const available = productData.sizes.includes(size);
               const selected = selectedSize === size;
 
               const baseClasses =

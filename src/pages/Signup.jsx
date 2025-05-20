@@ -1,10 +1,53 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { backendUrl } from "../config";
+import { UserContext } from "../context/UserContext";
 import { assets } from "../assets/getAssets";
 
 const Signup = () => {
+  const { setUser } = useContext(UserContext);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordConfirm, setpasswordConfirm] = useState("");
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
+
+    if (password !== passwordConfirm) {
+      toast.error("Passwords do not match", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${backendUrl}/users/signup`,
+        { name: username, email, password, passwordConfirm },
+        { withCredentials: true }
+      );
+
+      setUser(res.data.user);
+
+      toast.success("Account created successfully!", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000); // redirect after 3 seconds
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || "Signup failed. Please try again.";
+      toast.error(errorMessage, {
+        position: "top-left",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
@@ -24,6 +67,8 @@ const Signup = () => {
             <label className="block text-sm font-medium">Username</label>
             <input
               type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="yourname"
               required
@@ -34,6 +79,8 @@ const Signup = () => {
             <label className="block text-sm font-medium">Email</label>
             <input
               type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="you@example.com"
               required
@@ -44,6 +91,8 @@ const Signup = () => {
             <label className="block text-sm font-medium">Password</label>
             <input
               type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="••••••••"
               required
@@ -54,6 +103,8 @@ const Signup = () => {
             <label className="block text-sm font-medium">Confirm Password</label>
             <input
               type="password"
+              value={passwordConfirm}
+              onChange={(e) => setpasswordConfirm(e.target.value)}
               className="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
               placeholder="••••••••"
               required

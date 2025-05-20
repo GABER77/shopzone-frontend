@@ -15,15 +15,13 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      await axios.post(
+      const res = await axios.post(
         `${backendUrl}/users/login`,
         { email, password },
         { withCredentials: true } // important to include cookie
       );
 
-      const res = await axios.get(`${backendUrl}/users/me`, { withCredentials: true });
       setUser(res.data.user);
-
       window.location.href = "/";
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Login failed. Please try again.";
