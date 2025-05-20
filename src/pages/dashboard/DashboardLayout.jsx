@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import AddProduct from "./AddProduct";
 import MyProducts from "./MyProducts";
-import AllProducts from "./ViewAllProducts";
+import ViewAllProducts from "./ViewAllProducts";
 import ManageUsers from "./ManageUsersSellers";
 
 const menuItems = [
   { id: "addProduct", label: "Add Product", component: <AddProduct /> },
   { id: "myProducts", label: "My Products", component: <MyProducts /> },
-  { id: "allProducts", label: "View All Products", component: <AllProducts /> },
+  { id: "viewAllProducts", label: "View All Products", component: <ViewAllProducts /> },
   { id: "manageUsers", label: "Manage Users & Sellers", component: <ManageUsers /> },
 ];
 

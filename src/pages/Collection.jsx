@@ -5,7 +5,7 @@ import Title from "../components/Title";
 import ProductCard from "../components/ProductCard";
 
 const Collection = () => {
-  const { search, setSearch, products } = useContext(ShopContext);
+  const { search, setSearch, products, getAllProducts } = useContext(ShopContext);
 
   const [showFilter, setShowFilter] = useState(false);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -22,6 +22,10 @@ const Collection = () => {
     const value = e.target.value;
     setShoeSize((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
   };
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   useEffect(() => {
     let result = products.slice();

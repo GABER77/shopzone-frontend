@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 import { assets } from "../../assets/getAssets";
 
-const AllProducts = () => {
-  const { products, getAllProducts, deleteProduct } = useContext(ShopContext);
+const ViewAllProducts = () => {
+  const { products, getAllProducts, deleteProduct, loading } = useContext(ShopContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,9 +32,12 @@ const AllProducts = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="relative overflow-x-auto">
+      {/* Loading overlay */}
+      {loading && <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center" />}
+
       {products?.length > 0 ? (
-        <table className="min-w-full bg-white shadow-md rounded-2xl overflow-hidden">
+        <table className="min-w-[700px] w-full bg-white shadow-md rounded-2xl overflow-hidden">
           <thead className="bg-gray-100 text-gray-700 text-left">
             <tr>
               <th className="p-4">Image</th>
@@ -44,7 +47,7 @@ const AllProducts = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product) => (
+            {[...products].reverse().map((product) => (
               <tr
                 key={product._id}
                 onClick={() => handleNavigate(product._id)}
@@ -77,4 +80,4 @@ const AllProducts = () => {
   );
 };
 
-export default AllProducts;
+export default ViewAllProducts;

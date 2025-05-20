@@ -42,15 +42,17 @@ const ShopContextProvider = (props) => {
   };
 
   const deleteProduct = async (productId) => {
+    setLoading(true);
     try {
       await axios.delete(`${backendUrl}/products/${productId}`, { withCredentials: true });
-      setProducts((prev) => prev.filter((product) => product.id !== productId));
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete product", {
         position: "top-left",
         autoClose: 3000,
       });
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 

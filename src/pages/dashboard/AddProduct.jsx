@@ -107,6 +107,15 @@ const AddProduct = () => {
           required
         />
 
+        {/* Description */}
+        <textarea
+          placeholder="Description"
+          className="w-full p-3 border-2 rounded-lg"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
+
         {/* Price */}
         <input
           type="number"
@@ -116,15 +125,6 @@ const AddProduct = () => {
           onChange={(e) => setPrice(e.target.value)}
           min="0"
           step="0.01"
-          required
-        />
-
-        {/* Description */}
-        <textarea
-          placeholder="Description"
-          className="w-full p-3 border-2 rounded-lg"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
           required
         />
 

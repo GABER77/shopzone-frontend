@@ -4,8 +4,12 @@ import Title from "./Title";
 import ProductCard from "./ProductCard";
 
 const NewArrivals = () => {
-  const { products } = useContext(ShopContext);
+  const { products, getAllProducts } = useContext(ShopContext);
   const [newArrivals, setNewArrivals] = useState([]);
+
+  useEffect(() => {
+    getAllProducts();
+  }, []);
 
   useEffect(() => {
     setNewArrivals(products.slice(0, 10));
