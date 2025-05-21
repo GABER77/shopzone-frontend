@@ -6,7 +6,7 @@ import { UserContext } from "../context/UserContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { getCartCount, navigate } = useContext(ShopContext);
+  const { navigate } = useContext(ShopContext);
   const { user, logout } = useContext(UserContext);
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const Navbar = () => {
           <Link to="/cart" className="relative">
             <img src={assets.cart} className="w-6.5 cursor-pointer" alt="Cart" />
             <p className="absolute right-[-5px] bottom-[-5px] w-4.5 text-center leading-4 bg-blue-500 text-white aspect-square rounded-full text-[11px]">
-              {getCartCount()}
+              {/* {getCartCount()} */}
             </p>
           </Link>
         )}

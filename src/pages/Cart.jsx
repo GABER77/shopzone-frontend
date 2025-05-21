@@ -1,60 +1,73 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
+import { CartContext } from "../context/CartContext";
 import Title from "../components/Title";
 import { assets } from "../assets/getAssets";
 
 const Cart = () => {
-  const { products, cart, removeFromCart, currency, delivery_fee, tax_fee, navigate } = useContext(ShopContext);
+  const { currency, delivery_fee, tax_fee, navigate } = useContext(ShopContext);
+  const { cart, loading, getCart, removeFromCart, clearCart } = useContext(CartContext);
 
-  const cartItems = [];
+  useEffect(() => {
+    getCart();
+  }, []);
+
+  // Prepare cart items & subtotal
   let subtotal = 0;
+  const cartItems = cart
+    .filter(({ product, quantity }) => quantity > 0 && product)
+    .map(({ product, size, quantity }) => {
+      const itemTotal = product.price * quantity;
+      subtotal += itemTotal;
+      return { ...product, size, quantity, itemTotal };
+    });
 
-  for (const [productId, sizes] of Object.entries(cart)) {
-    for (const [size, quantity] of Object.entries(sizes)) {
-      if (quantity > 0) {
-        const productData = products.find((product) => product._id === productId);
-        if (productData) {
-          const itemTotal = productData.price * quantity;
-          subtotal += itemTotal;
-          cartItems.push({
-            ...productData,
-            size,
-            quantity,
-            itemTotal,
-          });
-        }
-      }
-    }
-  }
-
-  // Calculate the tax based on the subtotal
+  // Calculate fees and total
   const taxAmount = subtotal * (parseFloat(tax_fee) / 100);
-
-  // Add the delivery fee
   const deliveryFee = parseFloat(delivery_fee);
-
-  // Final Total Calculation: subtotal + tax + delivery fee
   const total = subtotal + taxAmount + deliveryFee;
 
+  // Clear cart with confirmation
+  const handleClearCart = () => {
+    if (window.confirm("Are you sure you want to clear your cart?")) {
+      clearCart();
+    }
+  };
+
+  // Remove single item handler
+  const handleRemoveItem = (productId, size) => {
+    removeFromCart(productId, size);
+  };
+
   return (
-    <div className="border-t pt-12">
-      <div className="text-2xl mb-3">
-        <Title text1={"YOUR"} text2={"CART"} />
+    <div>
+      {/* Loading overlay */}
+      {loading && <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center" />}
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="text-2xl font-bold">
+          <Title text1="YOUR" text2="CART" />
+        </h2>
+        <button
+          onClick={handleClearCart}
+          disabled={loading || cartItems.length === 0}
+          className="bg-red-500 text-white px-4 py-2 rounded-3xl cursor-pointer hover:bg-red-600 disabled:opacity-50"
+          aria-label="Clear Cart"
+        >
+          Clear Cart
+        </button>
       </div>
 
       {cartItems.length === 0 ? (
         <div className="flex justify-center items-center h-96">
-          <p className="text-xl font-medium text-gray-600 ">Your cart is empty.</p>
+          <p className="text-xl font-medium text-gray-600">Your cart is empty.</p>
         </div>
       ) : (
         <div className="flex flex-col lg:flex-row gap-8 mt-8">
-          {/* Cart Items Section */}
+          {/* Cart Items */}
           <div className="flex-1 space-y-8">
-            {cartItems.map((item, index) => (
-              <div key={index} className="flex gap-6 border-b pb-6">
-                <div>
-                  <img src={item.images[0]} alt={item.name} className="w-45 h-45 object-cover rounded-2xl shadow-xl" />
-                </div>
+            {cartItems.map((item, idx) => (
+              <div key={idx} className="flex gap-6 border-b pb-6">
+                <img src={item.images[0]} alt={item.name} className="w-45 h-45 object-cover rounded-2xl shadow-xl" />
                 <div className="flex-1">
                   <p className="font-semibold text-lg">{item.name}</p>
                   <p className="text-md text-gray-600">{item.category}</p>
@@ -63,19 +76,19 @@ const Cart = () => {
                   <p className="font-medium text-lg mt-6">Shipping</p>
                   <p className="text-md">Arrives by Fri, May 9</p>
                 </div>
-
-                {/* Price + Trash Icon */}
                 <div className="flex flex-col items-end">
                   <div className="font-medium text-xl text-right">
                     {currency}
                     {item.itemTotal.toFixed(2)}
                   </div>
-                  <img
-                    onClick={() => removeFromCart(item._id, item.size)}
-                    src={assets.trash}
-                    alt=""
-                    className="w-5 h-5 mt-17 cursor-pointer hover:opacity-70"
-                  />
+                  <button
+                    onClick={() => handleRemoveItem(item._id, item.size)}
+                    disabled={loading}
+                    aria-label={`Remove ${item.name} size ${item.size}`}
+                    className="mt-4"
+                  >
+                    <img src={assets.trash} alt="Remove item" className="w-5 h-5 cursor-pointer hover:opacity-70" />
+                  </button>
                 </div>
               </div>
             ))}
@@ -83,7 +96,7 @@ const Cart = () => {
 
           {/* Summary Section */}
           <div className="w-full h-95 lg:w-1/3 border p-6 rounded-2xl shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">Summary</h2>
+            <h3 className="text-lg font-semibold mb-4">Summary</h3>
             <div className="flex justify-between text-md mb-2">
               <span>Subtotal</span>
               <span>
@@ -115,7 +128,8 @@ const Cart = () => {
             </div>
             <button
               onClick={() => navigate("/orders")}
-              className="mt-4 w-full bg-blue-500 text-white cursor-pointer py-3 rounded-4xl hover:opacity-90"
+              disabled={loading}
+              className="mt-4 w-full bg-blue-500 text-white py-3 rounded-4xl hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
               Checkout
             </button>

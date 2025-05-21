@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendUrl } from "../config";
@@ -29,13 +29,11 @@ const CartProvider = ({ children }) => {
     try {
       await axios.post(`${backendUrl}/cart/${productId}`, { size, quantity }, { withCredentials: true });
       toast.success("Product added to cart", { position: "top-left", autoClose: 3000 });
-      await getCart();
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add to cart", {
         position: "top-left",
         autoClose: 3000,
       });
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -50,13 +48,12 @@ const CartProvider = ({ children }) => {
         withCredentials: true,
       });
       toast.success("Product removed from cart", { position: "top-left", autoClose: 3000 });
-      await getCart();
+      await getCart(); // Refresh page
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to remove from cart", {
         position: "top-left",
         autoClose: 3000,
       });
-      throw error;
     } finally {
       setLoading(false);
     }

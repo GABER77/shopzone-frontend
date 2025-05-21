@@ -16,15 +16,7 @@ const ViewAllProducts = () => {
   const handleDelete = async (e, productId) => {
     e.stopPropagation(); // Prevent card click
     const confirmed = window.confirm("Are you sure you want to delete this product?");
-    if (confirmed) {
-      try {
-        await deleteProduct(productId);
-        toast.success("Product deleted!", { position: "top-left" });
-        getAllProducts(); // Refresh page
-      } catch {
-        // Do nothing; error already handled inside addProduct
-      }
-    }
+    if (confirmed) await deleteProduct(productId);
   };
 
   const handleNavigate = (id) => {
