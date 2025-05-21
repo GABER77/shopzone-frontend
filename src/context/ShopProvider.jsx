@@ -5,7 +5,7 @@ import axios from "axios";
 import { ShopContext } from "./ShopContext";
 import { backendUrl } from "../config";
 
-const ShopContextProvider = (props) => {
+const ShopProvider = (props) => {
   const currency = "$";
   const delivery_fee = "10";
   const tax_fee = "5%";
@@ -134,4 +134,4 @@ const ShopContextProvider = (props) => {
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
 };
 
-export default ShopContextProvider;
+export default ShopProvider;

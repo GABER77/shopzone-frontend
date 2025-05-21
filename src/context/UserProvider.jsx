@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { backendUrl } from "../config";
 import { UserContext } from "./UserContext";
 
-export const UserProvider = ({ children }) => {
+const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -41,5 +41,9 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  return <UserContext.Provider value={{ user, setUser, loading, logout }}>{children}</UserContext.Provider>;
+  const value = { user, setUser, loading, logout };
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
+
+export default UserProvider;
