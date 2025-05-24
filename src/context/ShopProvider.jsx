@@ -10,8 +10,9 @@ const ShopProvider = (props) => {
   const delivery_fee = "10";
   const tax_fee = "5%";
 
-  const [search, setSearch] = useState("");
   const [products, setProducts] = useState([]);
+  const [totalResults, setTotalResults] = useState(0);
+  const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -28,15 +29,23 @@ const ShopProvider = (props) => {
     }
   };
 
-  const getAllProducts = async () => {
+  const getAllProducts = async (options = {}) => {
+    setLoading(true);
     try {
-      const res = await axios.get(`${backendUrl}/products`);
+      const res = await axios.get(`${backendUrl}/products`, {
+        params: options,
+      });
       setProducts(res.data.data || []);
+      setTotalResults(res.data.results || 0);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to fetch products", {
         position: "top-left",
         autoClose: 3000,
       });
+      setProducts([]);
+      setTotalResults(0);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +60,6 @@ const ShopProvider = (props) => {
         position: "top-left",
         autoClose: 3000,
       });
-      throw error;
     } finally {
       setLoading(false);
     }
@@ -66,6 +74,7 @@ const ShopProvider = (props) => {
     navigate,
     loading,
     products,
+    totalResults,
     addProduct,
     getAllProducts,
     deleteProduct,

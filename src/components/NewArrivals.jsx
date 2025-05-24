@@ -1,19 +1,14 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { ShopContext } from "../context/ShopContext";
 import Title from "./Title";
 import ProductCard from "./ProductCard";
 
 const NewArrivals = () => {
   const { products, getAllProducts } = useContext(ShopContext);
-  const [newArrivals, setNewArrivals] = useState([]);
 
   useEffect(() => {
-    getAllProducts();
+    getAllProducts({ page: 1, limit: 5, sort: "-createdAt" });
   }, []);
-
-  useEffect(() => {
-    setNewArrivals(products.slice(0, 10));
-  }, [products]);
 
   return (
     <div>
@@ -25,9 +20,9 @@ const NewArrivals = () => {
       </div>
       {/* Rendering Products Grid*/}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6 gap-y-7">
-        {newArrivals.map((item, index) => (
+        {products.map((item) => (
           <ProductCard
-            key={index}
+            key={item._id}
             id={item._id}
             images={item.images}
             name={item.name}

@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
 import { ShopContext } from "../../context/ShopContext";
 import { assets } from "../../assets/getAssets";
 
@@ -39,7 +38,7 @@ const ViewAllProducts = () => {
             </tr>
           </thead>
           <tbody>
-            {[...products].reverse().map((product) => (
+            {products.map((product) => (
               <tr
                 key={product._id}
                 onClick={() => handleNavigate(product._id)}

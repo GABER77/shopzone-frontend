@@ -1,67 +1,67 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/getAssets";
 import Title from "../components/Title";
 import ProductCard from "../components/ProductCard";
+import { assets } from "../assets/getAssets";
 
 const Collection = () => {
-  const { search, setSearch, products, getAllProducts } = useContext(ShopContext);
+  const { products, totalResults, getAllProducts, loading, search, setSearch } = useContext(ShopContext);
 
-  const [showFilter, setShowFilter] = useState(false);
-  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(5);
   const [category, setCategory] = useState([]);
   const [shoeSize, setShoeSize] = useState([]);
   const [sortType, setSortType] = useState("relevant");
 
+  const totalPages = Math.ceil(totalResults / limit);
+
   const toggleCategory = (e) => {
     const value = e.target.value;
+    setPage(1);
     setCategory((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
   };
 
   const toggleShoeSize = (e) => {
     const value = e.target.value;
+    setPage(1);
     setShoeSize((prev) => (prev.includes(value) ? prev.filter((item) => item !== value) : [...prev, value]));
   };
 
-  useEffect(() => {
-    getAllProducts();
-  }, []);
-
-  useEffect(() => {
-    let result = products.slice();
-
-    // 1. Filter by category
-    if (category.length > 0) {
-      result = result.filter((item) => category.includes(item.category));
-    }
-
-    // 2. Filter by shoe size
-    if (shoeSize.length > 0) {
-      result = result.filter((item) => item.size.some((size) => shoeSize.includes(size)));
-    }
-
-    // 3. Sort the result
+  const getSortParam = () => {
     switch (sortType) {
       case "low-high":
-        result.sort((a, b) => a.price - b.price);
-        break;
+        return "price";
       case "high-low":
-        result.sort((a, b) => b.price - a.price);
-        break;
+        return "-price";
       default:
-        // Relevant sort (no specific action needed)
-        break;
+        return "-createdAt";
     }
+  };
 
-    // 4. Update the filteredProducts
-    setFilteredProducts(result);
-  }, [products, category, shoeSize, sortType]);
+  const buildFilterParams = () => {
+    const params = {};
+    if (category.length) params.category = category;
+    if (shoeSize.length) {
+      const numericSizes = shoeSize.map(Number); // convert to numbers
+      params["sizes[$in]"] = numericSizes; // send as $in operator
+    }
+    return params;
+  };
+
+  const fetchProducts = async () => {
+    const filterParams = buildFilterParams();
+
+    await getAllProducts({
+      page,
+      limit,
+      sort: getSortParam(),
+      ...filterParams,
+    });
+  };
 
   useEffect(() => {
-    return () => {
-      setSearch(""); // Clear search when navigate to another screen
-    };
-  }, []);
+    fetchProducts();
+  }, [page, category, shoeSize, sortType, search]);
 
   return (
     <div>
@@ -79,22 +79,24 @@ const Collection = () => {
         </div>
       </div>
 
-      {/* Main Layout: Filters + Products */}
-      <div className="flex flex-col sm:flex-row gap-1 sm:gap-10">
+      <div className="flex flex-col sm:flex-row gap-6 mb-6">
         {/* Sidebar Filters */}
         <div className="min-w-60">
-          <div onClick={() => setShowFilter(!showFilter)} className="flex items-center gap-1">
-            <p className="text-xl flex items-center font-semibold tracking-wide">FILTERS</p>
-            <img className={`h-4 sm:hidden ${showFilter ? "rotate-270" : "rotate-180"}`} src={assets.back} alt="" />
-          </div>
+          <p className="text-xl font-semibold mb-4">FILTERS</p>
 
           {/* Category Filter */}
-          <div className={`border border-gray-500 rounded-lg p-5 mt-6 bg-white ${showFilter ? "" : "hidden"} sm:block`}>
+          <div className="border border-gray-500 rounded-lg p-5 bg-white mb-6">
             <p className="mb-4 text-lg font-semibold tracking-wide">Categories</p>
             <div className="flex flex-col gap-3 text-sm text-gray-900">
               {["Men's Shoes", "Women's Shoes", "Basketball Shoes", "Running Shoes"].map((type) => (
                 <label key={type} className="flex items-center gap-3 cursor-pointer hover:text-blue-500">
-                  <input type="checkbox" value={type} onChange={toggleCategory} className="w-4 h-4 accent-blue-500" />
+                  <input
+                    type="checkbox"
+                    value={type}
+                    onChange={toggleCategory}
+                    checked={category.includes(type)}
+                    className="w-4 h-4 accent-blue-500"
+                  />
                   {type}
                 </label>
               ))}
@@ -102,12 +104,18 @@ const Collection = () => {
           </div>
 
           {/* Shoe Size Filter */}
-          <div className={`border border-gray-500 rounded-lg p-5 mt-6 bg-white ${showFilter ? "" : "hidden"} sm:block`}>
+          <div className="border border-gray-500 rounded-lg p-5 bg-white">
             <p className="mb-4 text-lg font-semibold tracking-wide">Shoe Sizes</p>
-            <div className="flex flex-col gap-3 text-sm text-gray-900">
+            <div className="flex flex-col gap-3 text-sm text-gray-900 overflow-y-auto">
               {["7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11", "11.5", "12", "12.5", "13"].map((size) => (
                 <label key={size} className="flex items-center gap-3 cursor-pointer hover:text-blue-500">
-                  <input type="checkbox" value={size} onChange={toggleShoeSize} className="w-4 h-4 accent-blue-500" />
+                  <input
+                    type="checkbox"
+                    value={size}
+                    onChange={toggleShoeSize}
+                    checked={shoeSize.includes(size)}
+                    className="w-4 h-4 accent-blue-500"
+                  />
                   US Size {size}
                 </label>
               ))}
@@ -115,30 +123,73 @@ const Collection = () => {
           </div>
         </div>
 
-        {/* Product Grid */}
+        {/* Products Grid */}
         <div className="flex-1">
-          <div className="flex justify-between text-base sm:text-2xl mb-4">
-            <Title text1={"ALL"} text2={"Collections"} />
-            <select onChange={(e) => setSortType(e.target.value)} className="border-2 border-gray-500 text-sm px-2">
+          <div className="flex justify-between items-center mb-3 text-xl">
+            <Title text1={"ALL"} text2={"COLLECTIONS"} />
+
+            <select
+              onChange={(e) => {
+                setSortType(e.target.value);
+                setPage(1);
+              }}
+              value={sortType}
+              className="border-2 border-gray-500 text-sm w-45 h-8 px-2"
+            >
               <option value="relevant">Sort by: Relevant</option>
               <option value="low-high">Sort by: Low to High</option>
               <option value="high-low">Sort by: High to Low</option>
             </select>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
-            {filteredProducts.map((item, index) => (
-              <ProductCard
-                key={index}
-                id={item._id}
-                images={item.images}
-                name={item.name}
-                price={item.price}
-                onSale={item.onSale}
-                category={item.category}
-              />
-            ))}
-          </div>
+          {loading ? (
+            <p className="text-center py-10">Loading products...</p>
+          ) : products.length === 0 ? (
+            <p className="text-center py-10">No products found.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
+                {products.map((item) => (
+                  <ProductCard
+                    key={item._id}
+                    id={item._id}
+                    images={item.images}
+                    name={item.name}
+                    price={item.price}
+                    onSale={item.onSale}
+                    category={item.category}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              <div className="flex justify-center items-center gap-4 mt-8">
+                <button
+                  disabled={page <= 1}
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                  className={`px-4 py-2 rounded ${
+                    page <= 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                <span>
+                  Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+                </span>
+
+                <button
+                  disabled={page >= totalPages}
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                  className={`px-4 py-2 rounded ${
+                    page >= totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                  }`}
+                >
+                  Next
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
