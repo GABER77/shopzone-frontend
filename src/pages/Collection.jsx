@@ -5,7 +5,7 @@ import ProductCard from "../components/ProductCard";
 import { assets } from "../assets/getAssets";
 
 const Collection = () => {
-  const { products, totalResults, getAllProducts, loading, search, setSearch } = useContext(ShopContext);
+  const { products, totalResults, getAllProducts, loading, searchText, setSearchText } = useContext(ShopContext);
 
   const [page, setPage] = useState(1);
   const [limit] = useState(5);
@@ -55,13 +55,14 @@ const Collection = () => {
       page,
       limit,
       sort: getSortParam(),
+      searchText: searchText,
       ...filterParams,
     });
   };
 
   useEffect(() => {
     fetchProducts();
-  }, [page, category, shoeSize, sortType, search]);
+  }, [page, category, shoeSize, sortType, searchText]);
 
   return (
     <div>
@@ -69,8 +70,16 @@ const Collection = () => {
       <div className="border-t border-b text-center mb-6 py-1">
         <div className="inline-flex items-center justify-center border border-gray-700 px-5 py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2">
           <input
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={searchText}
+            onChange={(e) => {
+              const value = e.target.value;
+              setPage(1);
+              if (value.trim() === "") {
+                setSearchText(""); // Clear input if it only contains whitespace
+                return; // Prevent backend call
+              }
+              setSearchText(value);
+            }}
             className="flex-1 outline-none bg-inherit text-sm"
             type="text"
             placeholder="Search"

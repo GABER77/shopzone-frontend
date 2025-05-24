@@ -12,7 +12,7 @@ const ShopProvider = (props) => {
 
   const [products, setProducts] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
-  const [search, setSearch] = useState("");
+  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -69,8 +69,8 @@ const ShopProvider = (props) => {
     currency,
     delivery_fee,
     tax_fee,
-    search,
-    setSearch,
+    searchText,
+    setSearchText,
     navigate,
     loading,
     products,
