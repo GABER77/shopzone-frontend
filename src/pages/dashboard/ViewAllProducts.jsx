@@ -53,7 +53,7 @@ const ViewAllProducts = () => {
                   <img
                     src={assets.trash}
                     alt="Delete"
-                    className="w-5 h-5 cursor-auto hover:opacity-70"
+                    className="w-5 h-5 cursor-pointer hover:opacity-70"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(e, product._id);

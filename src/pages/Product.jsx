@@ -2,14 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { UserContext } from "../context/UserContext";
 import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import { assets } from "../assets/getAssets";
+import { CartContext } from "../context/CartContext";
 
 const Product = () => {
   const { productId } = useParams();
-  const { products, currency, addToCart, getAllProducts } = useContext(ShopContext);
+  const { products, getAllProducts, currency, navigate } = useContext(ShopContext);
+  const { addToCart } = useContext(CartContext);
   const { user } = useContext(UserContext);
-  const navigate = useNavigate();
+
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [selectedSize, setSelectedSize] = useState("");

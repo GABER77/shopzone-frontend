@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendUrl } from "../config";
@@ -8,6 +8,10 @@ const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    getCart();
+  }, []);
 
   // GET cart
   const getCart = async () => {
@@ -29,6 +33,7 @@ const CartProvider = ({ children }) => {
     try {
       await axios.post(`${backendUrl}/cart/${productId}`, { size, quantity }, { withCredentials: true });
       toast.success("Product added to cart", { position: "top-left", autoClose: 3000 });
+      await getCart(); // Refresh page
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add to cart", {
         position: "top-left",

@@ -6,7 +6,6 @@ import Dashboard from "./pages/dashboard/DashboardLayout";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 import Login from "./pages/Login";
-import Orders from "./pages/Orders";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/Signup";
@@ -45,14 +44,6 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Cart />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/orders"
-          element={
-            <ProtectedRoute>
-              <Orders />
             </ProtectedRoute>
           }
         />

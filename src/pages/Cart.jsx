@@ -1,16 +1,13 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { CartContext } from "../context/CartContext";
 import Title from "../components/Title";
 import { assets } from "../assets/getAssets";
 
 const Cart = () => {
-  const { currency, delivery_fee, tax_fee, navigate } = useContext(ShopContext);
-  const { cart, loading, getCart, removeFromCart, clearCart } = useContext(CartContext);
-
-  useEffect(() => {
-    getCart();
-  }, []);
+  const { currency, delivery_fee, tax_fee } = useContext(ShopContext);
+  const { cart, loading, removeFromCart, clearCart } = useContext(CartContext);
 
   // Prepare cart items & subtotal
   let subtotal = 0;
@@ -65,17 +62,22 @@ const Cart = () => {
         <div className="flex flex-col lg:flex-row gap-8 mt-8">
           {/* Cart Items */}
           <div className="flex-1 space-y-8">
-            {cartItems.map((item, idx) => (
+            {[...cartItems].reverse().map((item, idx) => (
               <div key={idx} className="flex gap-6 border-b pb-6">
-                <img src={item.images[0]} alt={item.name} className="w-45 h-45 object-cover rounded-2xl shadow-xl" />
-                <div className="flex-1">
-                  <p className="font-semibold text-lg">{item.name}</p>
-                  <p className="text-md text-gray-600">{item.category}</p>
-                  <p className="text-lg mt-1">Size: {item.size}</p>
-                  <p className="text-md">Qty: {item.quantity}</p>
-                  <p className="font-medium text-lg mt-6">Shipping</p>
-                  <p className="text-md">Arrives by Fri, May 9</p>
-                </div>
+                {/* Wrap image and product info with Link to product page */}
+                <Link to={`/product/${item._id}`} className="flex gap-6 flex-1 no-underline text-inherit">
+                  <img src={item.images[0]} alt={item.name} className="w-45 h-45 object-cover rounded-2xl shadow-xl" />
+                  <div className="flex-1">
+                    <p className="font-semibold text-lg">{item.name}</p>
+                    <p className="text-md text-gray-600">{item.category}</p>
+                    <p className="text-lg mt-1">Size: {item.size}</p>
+                    <p className="text-md">Qty: {item.quantity}</p>
+                    <p className="font-medium text-lg mt-6">Shipping</p>
+                    <p className="text-md">Arrives by Fri, May 9</p>
+                  </div>
+                </Link>
+
+                {/* Keep remove button outside the Link so clicking it doesn't navigate */}
                 <div className="flex flex-col items-end">
                   <div className="font-medium text-xl text-right">
                     {currency}
@@ -127,7 +129,6 @@ const Cart = () => {
               </span>
             </div>
             <button
-              onClick={() => navigate("/orders")}
               disabled={loading}
               className="mt-4 w-full bg-blue-500 text-white py-3 rounded-4xl hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >
