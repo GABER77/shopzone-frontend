@@ -3,7 +3,7 @@ import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { user, updateUserData, loading } = useContext(UserContext);
+  const { user, updateUserData, updateUserPassword, loading } = useContext(UserContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const Profile = () => {
 
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
   // Load user data when component mounts or user changes
   useEffect(() => {
@@ -52,8 +52,30 @@ const Profile = () => {
     }
   };
 
+  // Submit password change
+  const submitPassword = async (e) => {
+    e.preventDefault();
+
+    try {
+      await updateUserPassword({ oldPassword, newPassword, newPasswordConfirm });
+      toast.success("Password updated", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+
+      setOldPassword("");
+      setNewPassword("");
+      setNewPasswordConfirm("");
+    } catch {
+      // Do nothing; error already handled inside updateUserPassword
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto p-6">
+      {/* Loading overlay */}
+      {loading && <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center" />}
+
       <div className="flex flex-col gap-10">
         {/* Profile Section */}
         <section className="bg-white p-6 rounded-lg border-1 shadow-md">
@@ -106,7 +128,7 @@ const Profile = () => {
         {/* Password Section */}
         <section className="bg-white p-6 rounded-lg border-1 shadow-md">
           <h2 className="text-2xl mb-4 font-semibold">Change Password</h2>
-          <form className="space-y-4">
+          <form onSubmit={submitPassword} className="space-y-4">
             <input
               type="password"
               placeholder="Old Password"
@@ -127,8 +149,8 @@ const Profile = () => {
               type="password"
               placeholder="Confirm New Password"
               className="w-full p-2 border rounded"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={newPasswordConfirm}
+              onChange={(e) => setNewPasswordConfirm(e.target.value)}
               required
             />
 

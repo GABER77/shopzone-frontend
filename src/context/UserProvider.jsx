@@ -6,7 +6,10 @@ import { UserContext } from "./UserContext";
 
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // This loading is only for fetching user data refresh(used in ProtectedRoute.jsx)
+  const [loadingUserData, setLoadingUserData] = useState(true);
+  // This loading is for API calls like update password, update profile, etc.
+  const [loading, setLoading] = useState(false);
 
   // Fetch current user on refresh
   useEffect(() => {
@@ -23,7 +26,7 @@ const UserProvider = ({ children }) => {
       console.error("Failed to fetch current user:", error);
       setUser(null);
     } finally {
-      setLoading(false);
+      setLoadingUserData(false);
     }
   };
 
@@ -45,7 +48,6 @@ const UserProvider = ({ children }) => {
     setLoading(true);
     try {
       const response = await axios.patch(`${backendUrl}/users/update-me`, updatedData, { withCredentials: true });
-      console.log(response);
       setUser(response.data.updatedUser);
     } catch (error) {
       console.error("Update User Failed:", error);
@@ -59,7 +61,22 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  const value = { user, setUser, loading, logout, updateUserData };
+  const updateUserPassword = async (updatedData) => {
+    setLoading(true);
+    try {
+      await axios.patch(`${backendUrl}/users/update-password`, updatedData, { withCredentials: true });
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to update password", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const value = { user, setUser, loading, loadingUserData, logout, updateUserData, updateUserPassword };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
