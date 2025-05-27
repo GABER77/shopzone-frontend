@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import AddProduct from "./AddProduct";
 import MyProducts from "./MyProducts";
 import ViewAllProducts from "./ViewAllProducts";
-import ManageUsers from "./ManageUsersSellers";
+import ManageAllUsers from "./ManageAllUsers";
+import { UserContext } from "../../context/UserContext";
 
 const menuItems = [
   { id: "addProduct", label: "Add Product", component: <AddProduct /> },
   { id: "myProducts", label: "My Products", component: <MyProducts /> },
   { id: "viewAllProducts", label: "View All Products", component: <ViewAllProducts /> },
-  { id: "manageUsers", label: "Manage Users & Sellers", component: <ManageUsers /> },
+  { id: "manageAllUsers", label: "Manage All Users", component: <ManageAllUsers /> },
 ];
 
 const Dashboard = () => {
+  const { user } = useContext(UserContext);
   const [activePanel, setActivePanel] = useState("addProduct");
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Conditionally filter menuItems based on user role
+  const filteredMenuItems = menuItems.filter((item) => {
+    if (item.id === "viewAllProducts" || item.id === "manageAllUsers") {
+      return user?.role === "admin";
+    }
+    return true;
+  });
 
   const renderMenu = (isMobile = false) => (
     <div
@@ -22,7 +32,7 @@ const Dashboard = () => {
       } bg-white shadow-xl p-6 space-y-4 w-full md:w-72`}
     >
       {!isMobile && <h1 className="text-2xl font-bold text-blue-600 mb-4">Dashboard</h1>}
-      {menuItems.map(({ id, label }) => (
+      {filteredMenuItems.map(({ id, label }) => (
         <button
           key={id}
           onClick={() => {
@@ -39,7 +49,7 @@ const Dashboard = () => {
     </div>
   );
 
-  const currentComponent = menuItems.find((item) => item.id === activePanel)?.component;
+  const currentComponent = filteredMenuItems.find((item) => item.id === activePanel)?.component;
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-gray-100">

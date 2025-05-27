@@ -5,7 +5,7 @@ import { UserContext } from "../../context/UserContext";
 
 const roles = ["user", "seller", "admin"];
 
-const ManageUsers = () => {
+const ManageAllUsers = () => {
   const { allUsers, getAllUsers, updateUserData, loading } = useContext(UserContext);
   const [editUserId, setEditUserId] = useState(null);
   const [editForm, setEditForm] = useState({});
@@ -159,4 +159,4 @@ const ManageUsers = () => {
   );
 };
 
-export default ManageUsers;
+export default ManageAllUsers;
