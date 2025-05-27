@@ -7,6 +7,7 @@ import { UserContext } from "./UserContext";
 const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
+  const [totalResults, setTotalResults] = useState(0);
   // This loading is only for fetching user data refresh(used in ProtectedRoute.jsx)
   const [loadingUserData, setLoadingUserData] = useState(true);
   // This loading is for API calls like update password, update profile, etc.
@@ -101,6 +102,7 @@ const UserProvider = ({ children }) => {
         withCredentials: true,
       });
       setAllUsers(response.data.data);
+      setTotalResults(response.data.results);
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to get all users", {
         position: "top-left",
@@ -123,6 +125,7 @@ const UserProvider = ({ children }) => {
     updateUserPassword,
     allUsers,
     updateUserData,
+    totalResults,
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

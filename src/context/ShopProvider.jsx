@@ -54,7 +54,7 @@ const ShopProvider = (props) => {
     try {
       await axios.delete(`${backendUrl}/products/${productId}`, { withCredentials: true });
       toast.success("Product deleted!", { position: "top-left" });
-      await getAllProducts(); // Refresh page
+      await getAllProducts(); // Refresh the products
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to delete product", {
         position: "top-left",

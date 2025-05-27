@@ -6,13 +6,22 @@ import { UserContext } from "../../context/UserContext";
 const roles = ["user", "seller", "admin"];
 
 const ManageAllUsers = () => {
-  const { allUsers, getAllUsers, updateUserData, loading } = useContext(UserContext);
+  const { allUsers, getAllUsers, updateUserData, loading, totalResults } = useContext(UserContext);
+
   const [editUserId, setEditUserId] = useState(null);
   const [editForm, setEditForm] = useState({});
+  const [page, setPage] = useState(1);
+  const [limit] = useState(3);
+
+  const totalPages = Math.ceil(totalResults / limit);
 
   useEffect(() => {
-    getAllUsers();
-  }, []);
+    getAllUsers({
+      page,
+      limit,
+      fields: "image,name,email,role,active",
+    });
+  }, [page]);
 
   const startEditing = (user) => {
     setEditUserId(user._id);
@@ -35,17 +44,28 @@ const ManageAllUsers = () => {
         ...editForm,
         active: editForm.active === "true" || editForm.active === true,
       };
+
       await updateUserData(userId, updatedData);
       toast.success("User updated", {
         position: "top-left",
         autoClose: 3000,
       });
       setEditUserId(null);
-      getAllUsers();
+
+      // Refresh users list
+      await getAllUsers({
+        page,
+        limit,
+        fields: "image,name,email,role,active",
+      });
     } catch {
-      // Do nothing; error already handled inside updateUser
+      // Error already handled inside updateUserData
     }
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   return (
     <div className="relative overflow-x-auto">
@@ -155,6 +175,35 @@ const ManageAllUsers = () => {
           })}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          disabled={page <= 1}
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          className={`px-4 py-2 rounded ${
+            page <= 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          }`}
+        >
+          Previous
+        </button>
+
+        <span>
+          Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+        </span>
+
+        <button
+          disabled={page >= totalPages}
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          className={`px-4 py-2 rounded ${
+            page >= totalPages
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          }`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
