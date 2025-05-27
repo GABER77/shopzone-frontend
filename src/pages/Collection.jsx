@@ -61,6 +61,10 @@ const Collection = () => {
   };
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
+
+  useEffect(() => {
     fetchProducts();
   }, [page, category, shoeSize, sortType, searchText]);
 
@@ -152,7 +156,9 @@ const Collection = () => {
           </div>
 
           {loading ? (
-            <p className="text-center py-10">Loading products...</p>
+            <div className="flex justify-center items-center h-screen">
+              <div className="w-12 h-12 border-4 border-transparent border-t-blue-600 rounded-full animate-[spin_0.3s_linear_infinite]"></div>
+            </div>
           ) : products.length === 0 ? (
             <p className="text-center py-10">No products found.</p>
           ) : (
@@ -177,7 +183,9 @@ const Collection = () => {
                   disabled={page <= 1}
                   onClick={() => setPage((p) => Math.max(p - 1, 1))}
                   className={`px-4 py-2 rounded ${
-                    page <= 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                    page <= 1
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
                   }`}
                 >
                   Previous
@@ -191,7 +199,9 @@ const Collection = () => {
                   disabled={page >= totalPages}
                   onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                   className={`px-4 py-2 rounded ${
-                    page >= totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700"
+                    page >= totalPages
+                      ? "bg-gray-300 cursor-not-allowed"
+                      : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
                   }`}
                 >
                   Next

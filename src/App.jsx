@@ -9,6 +9,7 @@ import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/Signup";
+import Profile from "./pages/Profile";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -47,6 +48,17 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all unknown route */}
+        <Route path="*" element={<h1 className="text-center text-2xl mt-20 text-red-600">404 - Page Not Found</h1>} />
       </Routes>
       <Footer />
     </div>

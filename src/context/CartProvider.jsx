@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendUrl } from "../config";
 import { CartContext } from "./CartContext";
+import { UserContext } from "./UserContext";
 
 const CartProvider = ({ children }) => {
+  const { user } = useContext(UserContext);
   const [cart, setCart] = useState([]);
   const [cartCount, setCartCount] = useState(0);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getCart();
-  }, []);
+    if (user) {
+      getCart();
+    }
+  }, [user]);
 
   // GET cart
   const getCart = async () => {
@@ -33,7 +37,7 @@ const CartProvider = ({ children }) => {
     try {
       await axios.post(`${backendUrl}/cart/${productId}`, { size, quantity }, { withCredentials: true });
       toast.success("Product added to cart", { position: "top-left", autoClose: 3000 });
-      await getCart(); // Refresh page
+      await getCart(); // Refresh cart counter and cart data
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to add to cart", {
         position: "top-left",
@@ -53,7 +57,7 @@ const CartProvider = ({ children }) => {
         withCredentials: true,
       });
       toast.success("Product removed from cart", { position: "top-left", autoClose: 3000 });
-      await getCart(); // Refresh page
+      await getCart(); // Refresh cart counter and cart data
     } catch (error) {
       toast.error(error.response?.data?.message || "Failed to remove from cart", {
         position: "top-left",

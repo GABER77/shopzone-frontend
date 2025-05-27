@@ -53,15 +53,17 @@ const Navbar = () => {
 
       <div className="flex items-center gap-8">
         {user ? (
-          <div className="flex items-center gap-3 cursor-pointer select-none">
-            <img
-              src={user.image}
-              alt=""
-              className="w-8 h-8 rounded-full object-cover"
-              onError={(e) => (e.style.display = "none")}
-            />
-            <span className="font-medium">{user.name?.split(" ")[0] || "User"}</span>
-          </div>
+          <Link to="/profile" className="relative">
+            <div className="flex items-center gap-3 cursor-pointer select-none">
+              <img
+                src={user.image}
+                alt=""
+                className="w-8 h-8 rounded-full object-cover"
+                onError={(e) => (e.style.display = "none")}
+              />
+              <span className="font-medium">{user.name?.split(" ")[0] || "User"}</span>
+            </div>
+          </Link>
         ) : (
           <div className="group relative">
             <button onClick={() => navigate("/login")} className="py-2.5 px-5 cursor-pointer">
