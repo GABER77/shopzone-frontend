@@ -3,7 +3,7 @@ import { UserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 
 const Profile = () => {
-  const { user, updateUserData, updateUserPassword, loading } = useContext(UserContext);
+  const { user, updateCurrentUserData, updateUserPassword, loading } = useContext(UserContext);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,14 +41,14 @@ const Profile = () => {
     if (imageFile) formData.append("image", imageFile);
 
     try {
-      await updateUserData(formData);
+      await updateCurrentUserData(formData);
       toast.success("Profile updated", {
         position: "top-left",
         autoClose: 3000,
       });
       setImageFile(null);
     } catch {
-      // Do nothing; error already handled inside updateUserData
+      // Do nothing; error already handled inside updateCurrentUserData
     }
   };
 
