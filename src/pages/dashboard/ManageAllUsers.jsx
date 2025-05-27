@@ -6,7 +6,7 @@ import { UserContext } from "../../context/UserContext";
 const roles = ["user", "seller", "admin"];
 
 const ManageAllUsers = () => {
-  const { allUsers, getAllUsers, updateUserData, loading, totalResults } = useContext(UserContext);
+  const { allUsers, getAllUsers, updateUserData, loading, totalResults, user: currentUser } = useContext(UserContext);
 
   const [editUserId, setEditUserId] = useState(null);
   const [editForm, setEditForm] = useState({});
@@ -85,6 +85,7 @@ const ManageAllUsers = () => {
         <tbody>
           {allUsers?.map((user) => {
             const isEditing = editUserId === user._id;
+            const isCurrentUser = currentUser?._id === user._id;
 
             return (
               <tr key={user._id} className="hover:bg-gray-50 border-b transition">
@@ -97,76 +98,104 @@ const ManageAllUsers = () => {
                 </td>
                 <td className="p-4">
                   {isEditing ? (
-                    <input
-                      type="text"
-                      value={editForm.name}
-                      onChange={(e) => handleChange("name", e.target.value)}
-                      className="border p-1 rounded w-full"
-                    />
+                    isCurrentUser ? (
+                      // Show static text for current user (no editing)
+                      <span>{editForm.name}</span>
+                    ) : (
+                      <input
+                        type="text"
+                        value={editForm.name}
+                        onChange={(e) => handleChange("name", e.target.value)}
+                        className="border p-1 rounded w-full"
+                      />
+                    )
                   ) : (
                     user.name
                   )}
                 </td>
                 <td className="p-4">
                   {isEditing ? (
-                    <input
-                      type="email"
-                      value={editForm.email}
-                      onChange={(e) => handleChange("email", e.target.value)}
-                      className="border p-1 rounded w-full"
-                    />
+                    isCurrentUser ? (
+                      <span>{editForm.email}</span>
+                    ) : (
+                      <input
+                        type="email"
+                        value={editForm.email}
+                        onChange={(e) => handleChange("email", e.target.value)}
+                        className="border p-1 rounded w-full"
+                      />
+                    )
                   ) : (
                     user.email
                   )}
                 </td>
                 <td className="p-4">
                   {isEditing ? (
-                    <select
-                      value={editForm.role}
-                      onChange={(e) => handleChange("role", e.target.value)}
-                      className="border p-1 rounded w-full"
-                    >
-                      {roles.map((role) => (
-                        <option key={role} value={role}>
-                          {role}
-                        </option>
-                      ))}
-                    </select>
+                    isCurrentUser ? (
+                      <span>{editForm.role}</span>
+                    ) : (
+                      <select
+                        value={editForm.role}
+                        onChange={(e) => handleChange("role", e.target.value)}
+                        className="border p-1 rounded w-full"
+                      >
+                        {roles.map((role) => (
+                          <option key={role} value={role}>
+                            {role}
+                          </option>
+                        ))}
+                      </select>
+                    )
                   ) : (
                     user.role
                   )}
                 </td>
                 <td className="p-4">
                   {isEditing ? (
-                    <select
-                      value={String(editForm.active)}
-                      onChange={(e) => handleChange("active", e.target.value)}
-                      className="border p-1 rounded w-full"
-                    >
-                      <option value="true">true</option>
-                      <option value="false">false</option>
-                    </select>
+                    isCurrentUser ? (
+                      <span>{String(editForm.active)}</span>
+                    ) : (
+                      <select
+                        value={String(editForm.active)}
+                        onChange={(e) => handleChange("active", e.target.value)}
+                        className="border p-1 rounded w-full"
+                      >
+                        <option value="true">true</option>
+                        <option value="false">false</option>
+                      </select>
+                    )
                   ) : (
                     String(user.active)
                   )}
                 </td>
                 <td className="p-4">
                   {isEditing ? (
-                    <button
-                      onClick={() => handleSave(user._id)}
-                      disabled={loading}
-                      className={`px-3 py-1 rounded-full cursor-pointer text-white ${
-                        loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
-                      }`}
-                    >
-                      Save
-                    </button>
+                    isCurrentUser ? (
+                      <button disabled className="px-3 py-1 rounded-full bg-gray-400 text-white cursor-not-allowed">
+                        Save
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleSave(user._id)}
+                        disabled={loading}
+                        className={`px-3 py-1 rounded-full cursor-pointer text-white ${
+                          loading ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+                        }`}
+                      >
+                        Save
+                      </button>
+                    )
                   ) : (
                     <button
                       onClick={() => startEditing(user)}
-                      className="bg-blue-500 text-white px-3 py-1 rounded-full hover:bg-blue-600 cursor-pointer"
+                      disabled={isCurrentUser}
+                      className={`px-3 py-1 rounded-full text-white ${
+                        isCurrentUser
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-blue-500 hover:bg-blue-600 cursor-pointer"
+                      }`}
                     >
-                      Edit
+                      {isCurrentUser ? "You" : "Edit"}
                     </button>
                   )}
                 </td>
