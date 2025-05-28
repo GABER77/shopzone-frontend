@@ -15,7 +15,7 @@ const ViewAllProducts = () => {
   }, [page]);
 
   const handleDelete = async (e, productId) => {
-    e.stopPropagation(); // Prevent card click
+    e.stopPropagation(); // Prevent another click
     const confirmed = window.confirm("Are you sure you want to delete this product?");
     if (confirmed) await deleteProduct(productId);
   };
