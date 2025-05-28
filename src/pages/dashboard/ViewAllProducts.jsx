@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { ShopContext } from "../../context/ShopContext";
 import { assets } from "../../assets/getAssets";
 
 const ViewAllProducts = () => {
-  const { products, getAllProducts, deleteProduct, loading } = useContext(ShopContext);
-  const navigate = useNavigate();
+  const { products, getAllProducts, deleteProduct, loading, totalResults, navigate } = useContext(ShopContext);
+  const [page, setPage] = useState(1);
+  const [limit] = useState(3);
+
+  const totalPages = Math.ceil(totalResults / limit);
 
   useEffect(() => {
-    getAllProducts();
-  }, []);
+    getAllProducts({ page, limit });
+  }, [page]);
 
   const handleDelete = async (e, productId) => {
     e.stopPropagation(); // Prevent card click
@@ -21,6 +23,10 @@ const ViewAllProducts = () => {
   const handleNavigate = (id) => {
     navigate(`/product/${id}`);
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [page]);
 
   return (
     <div className="relative overflow-x-auto">
@@ -67,6 +73,35 @@ const ViewAllProducts = () => {
       ) : (
         <div className="p-6 text-center text-xl">No products published yet.</div>
       )}
+
+      {/* Pagination Controls */}
+      <div className="flex justify-center items-center gap-4 mt-6">
+        <button
+          disabled={page <= 1}
+          onClick={() => setPage((p) => Math.max(p - 1, 1))}
+          className={`px-4 py-2 rounded ${
+            page <= 1 ? "bg-gray-300 cursor-not-allowed" : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          }`}
+        >
+          Previous
+        </button>
+
+        <span>
+          Page <strong>{page}</strong> of <strong>{totalPages}</strong>
+        </span>
+
+        <button
+          disabled={page >= totalPages}
+          onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+          className={`px-4 py-2 rounded ${
+            page >= totalPages
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer"
+          }`}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
