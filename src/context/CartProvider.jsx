@@ -17,7 +17,6 @@ const CartProvider = ({ children }) => {
     }
   }, [user]);
 
-  // GET cart
   const getCart = async () => {
     try {
       const res = await axios.get(`${backendUrl}/cart`, { withCredentials: true });
@@ -31,7 +30,6 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // ADD to cart
   const addToCart = async (productId, size, quantity = 1) => {
     setLoading(true);
     try {
@@ -48,7 +46,6 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // REMOVE from cart
   const removeFromCart = async (productId, size) => {
     setLoading(true);
     try {
@@ -68,7 +65,6 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // CLEAR entire cart
   const clearCart = async () => {
     setLoading(true);
     try {
@@ -86,6 +82,27 @@ const CartProvider = ({ children }) => {
     }
   };
 
+  const checkout = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(`${backendUrl}/checkout`, { withCredentials: true });
+
+      // Redirect to Stripe Checkout
+      if (response.data?.session?.url) {
+        window.location.href = response.data.session.url;
+      } else {
+        toast.error("Stripe session not returned");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete product", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     cart,
     cartCount,
@@ -94,6 +111,7 @@ const CartProvider = ({ children }) => {
     addToCart,
     removeFromCart,
     clearCart,
+    checkout,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

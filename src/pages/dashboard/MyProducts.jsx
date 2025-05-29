@@ -6,7 +6,7 @@ import { assets } from "../../assets/getAssets";
 const MyProducts = () => {
   const { myProducts, getMyProducts, deleteProduct, loading, totalResults, navigate } = useContext(ShopContext);
   const [page, setPage] = useState(1);
-  const [limit] = useState(3);
+  const [limit] = useState(7);
 
   const totalPages = Math.ceil(totalResults / limit);
   console.log(totalPages);

@@ -7,7 +7,7 @@ import { assets } from "../assets/getAssets";
 
 const Cart = () => {
   const { currency, delivery_fee, tax_fee } = useContext(ShopContext);
-  const { cart, loading, removeFromCart, clearCart } = useContext(CartContext);
+  const { cart, loading, removeFromCart, clearCart, checkout } = useContext(CartContext);
 
   // Prepare cart items & subtotal
   let subtotal = 0;
@@ -40,6 +40,7 @@ const Cart = () => {
     <div>
       {/* Loading overlay */}
       {loading && <div className="absolute inset-0 bg-white/50 z-10 flex items-center justify-center" />}
+
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-2xl font-bold">
           <Title text1="YOUR" text2="CART" />
@@ -129,6 +130,7 @@ const Cart = () => {
               </span>
             </div>
             <button
+              onClick={checkout}
               disabled={loading}
               className="mt-4 w-full bg-blue-500 text-white py-3 rounded-4xl hover:opacity-90 disabled:opacity-50 cursor-pointer"
             >

@@ -11,7 +11,7 @@ const ManageAllUsers = () => {
   const [editUserId, setEditUserId] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [page, setPage] = useState(1);
-  const [limit] = useState(3);
+  const [limit] = useState(7);
 
   const totalPages = Math.ceil(totalResults / limit);
 

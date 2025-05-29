@@ -8,7 +8,7 @@ const Collection = () => {
   const { products, totalResults, getAllProducts, loading, searchText, setSearchText } = useContext(ShopContext);
 
   const [page, setPage] = useState(1);
-  const [limit] = useState(5);
+  const [limit] = useState(12);
   const [category, setCategory] = useState([]);
   const [shoeSize, setShoeSize] = useState([]);
   const [sortType, setSortType] = useState("relevant");

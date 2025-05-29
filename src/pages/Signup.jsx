@@ -40,7 +40,7 @@ const Signup = () => {
 
       setTimeout(() => {
         window.location.href = "/";
-      }, 3000); // redirect after 3 seconds
+      }, 1000); // redirect after 1 seconds
     } catch (err) {
       const errorMessage = err.response?.data?.message || "Signup failed. Please try again.";
       toast.error(errorMessage, {

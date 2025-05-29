@@ -7,7 +7,7 @@ const NewArrivals = () => {
   const { products, getAllProducts } = useContext(ShopContext);
 
   useEffect(() => {
-    getAllProducts({ page: 1, limit: 5, sort: "-createdAt" });
+    getAllProducts({ page: 1, limit: 10, sort: "-createdAt" });
   }, []);
 
   return (
