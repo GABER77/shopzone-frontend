@@ -1,9 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
+import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { backendUrl } from "../config";
 import { CartContext } from "./CartContext";
 import { UserContext } from "./UserContext";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
 const CartProvider = ({ children }) => {
   const { user } = useContext(UserContext);
@@ -88,13 +91,21 @@ const CartProvider = ({ children }) => {
       const response = await axios.get(`${backendUrl}/checkout`, { withCredentials: true });
 
       // Redirect to Stripe Checkout
-      if (response.data?.session?.url) {
-        window.location.href = response.data.session.url;
+      const stripe = await stripePromise;
+
+      if (!stripe) {
+        throw new Error("Stripe failed to load");
+      }
+
+      const sessionId = response.data?.session?.id;
+
+      if (sessionId) {
+        await stripe.redirectToCheckout({ sessionId });
       } else {
-        toast.error("Stripe session not returned");
+        toast.error("No session ID returned");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to delete product", {
+      toast.error(error.response?.data?.message || "Something went wrong during checkout", {
         position: "top-left",
         autoClose: 3000,
       });
