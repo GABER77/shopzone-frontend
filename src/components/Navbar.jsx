@@ -43,11 +43,15 @@ const Navbar = () => {
           </NavLink>
         )}
 
+        {user && (
+          <NavLink to="/orders" className="flex flex-col items-center">
+            <p>ORDERS</p>
+            <hr className="w-3/4 border-none h-[1.6px] bg-blue-500 hidden" />
+          </NavLink>
+        )}
+
         <NavLink className="flex flex-col items-center">
           <p>ABOUT</p>
-        </NavLink>
-        <NavLink className="flex flex-col items-center">
-          <p>CONTACT</p>
         </NavLink>
       </ul>
 

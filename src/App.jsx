@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Orders from "./pages/Orders";
 import { ToastContainer } from "react-toastify";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -53,6 +54,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Orders />
             </ProtectedRoute>
           }
         />

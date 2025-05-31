@@ -12,6 +12,7 @@ const ShopProvider = (props) => {
 
   const [products, setProducts] = useState([]);
   const [myProducts, setMyProducts] = useState([]);
+  const [myOrders, setMyOrders] = useState([]);
   const [totalResults, setTotalResults] = useState(0);
   const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -88,6 +89,24 @@ const ShopProvider = (props) => {
     }
   };
 
+  const getMyOrders = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(`${backendUrl}/orders`, {
+        withCredentials: true,
+      });
+      setMyOrders(res.data.data.orders || []);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to fetch orders", {
+        position: "top-left",
+        autoClose: 3000,
+      });
+      setMyOrders([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     currency,
     delivery_fee,
@@ -103,6 +122,8 @@ const ShopProvider = (props) => {
     deleteProduct,
     myProducts,
     getMyProducts,
+    getMyOrders,
+    myOrders,
   };
 
   return <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>;
